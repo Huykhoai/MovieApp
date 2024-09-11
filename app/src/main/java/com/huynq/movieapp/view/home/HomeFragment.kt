@@ -18,6 +18,7 @@ import com.huynq.movieapp.data.MovieResponsitory
 import com.huynq.movieapp.databinding.FragmentHomeBinding
 import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.utils.APIConstants
+import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding?.progressBarNewMovie?.visibility = View.VISIBLE
         super.onViewCreated(view, savedInstanceState)
         initView()
         displayPopularMovies()
@@ -47,7 +49,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private fun initView() {
     }
     private fun displayPopularMovies(){
-        binding?.progressBarNewMovie?.visibility = View.VISIBLE
         lifecycleScope.launch {
             mainViewModel.getPopularMovies(APIConstants.API_KEY)
             withContext(Dispatchers.Main){
@@ -60,7 +61,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                             mainViewModel,
                             object : HomeAdapter.MovieListRVAdapterClickListener{
                                 override fun onMovieClick(movie_id: Int) {
-                                    Toast.makeText(context,"Movie_id: $movie_id",Toast.LENGTH_SHORT).show()
+                                    openScreen(DetailFragment.newInstance(movie_id), true)
                                 }
 
 
@@ -85,7 +86,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                             mainViewModel,
                             object : HomeAdapter.MovieListRVAdapterClickListener{
                                 override fun onMovieClick(movie_id: Int) {
-                                    Toast.makeText(context,"Movie_id: $movie_id",Toast.LENGTH_SHORT).show()
+                                    openScreen(DetailFragment.newInstance(movie_id), true)
                                 }
                             })
                         binding?.recycleViewUpcommingMovie?.layoutManager =

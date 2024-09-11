@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.detail.DetailFragment">
-
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="myViewModel"-->
+<!--            type="com.huynq.movieapp.viewmodel.MainViewModel" />-->
+<!--    </data>-->
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
@@ -18,7 +22,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -61,7 +65,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/btn_back"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/bg_circle_dark"
@@ -69,10 +73,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/white"
-                    tools:src="@drawable/back" />
+                    android:src="@drawable/back" />
 
                 <ImageView
-                    android:id="@+id/imageView9"
+                    android:id="@+id/btn_favorite"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/bg_circle_dark"
@@ -80,7 +84,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/white"
-                    tools:src="@drawable/fav" />
+                    android:src="@drawable/fav" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,13 +97,12 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="24dp"
                     android:maxLines="2"
-                    android:text="Title"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -118,13 +121,13 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
-                        android:id="@+id/currentStart"
+                        android:id="@+id/currentStar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:drawableStart="@drawable/star"
                         android:drawablePadding="5dp"
-                        android:drawableTint="@color/white"
+                        android:drawableTint="@color/yellow"
                         android:gravity="center_vertical"
                         android:text="0"
                         android:textColor="@color/white" />
@@ -136,7 +139,7 @@
                         android:layout_weight="1"
                         android:drawableStart="@drawable/baseline_access_time_24"
                         android:drawablePadding="5dp"
-                        android:drawableTint="@color/white"
+                        android:drawableTint="@color/yellow"
                         android:gravity="center_vertical"
                         android:text="0"
                         android:textColor="@color/white" />
@@ -147,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:drawableStart="@drawable/ic_calendar"
                         android:drawablePadding="5dp"
-                        android:drawableTint="@color/white"
+                        android:drawableTint="@color/yellow"
                         android:gravity="center_vertical"
                         android:text="0"
                         android:textAlignment="viewEnd"
@@ -163,10 +166,10 @@
                 android:layout_margin="16dp"
                 android:drawableStart="@drawable/ic_info"
                 android:drawablePadding="5dp"
-                android:drawableTint="@color/white"
+                android:drawableTint="@color/yellow"
                 android:gravity="center_vertical"
                 android:text="Summary"
-                android:textColor="@color/white"
+                android:textColor="@color/yellow"
                 android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -177,9 +180,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="test"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="14dp"
+                android:maxLines="5"
                 app:layout_constraintEnd_toEndOf="@+id/textView11"
                 app:layout_constraintStart_toStartOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -191,10 +195,10 @@
                 android:layout_marginTop="16dp"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="5dp"
-                android:drawableTint="@color/white"
+                android:drawableTint="@color/yellow"
                 android:gravity="center_vertical"
-                android:text="Action"
-                android:textColor="@color/white"
+                android:text="Genres"
+                android:textColor="@color/yellow"
                 android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/movieSummaryInfo"
                 app:layout_constraintStart_toStartOf="@+id/movieSummaryInfo"
@@ -205,24 +209,38 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:drawableStart="@drawable/ic_person"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/white"
                 android:gravity="center_vertical"
-                android:text="test"
+                tools:text="test"
                 android:textColor="@color/white"
                 android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView18"
                 app:layout_constraintStart_toStartOf="@+id/textView18"
                 app:layout_constraintTop_toBottomOf="@+id/textView18" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_video"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/yellow"
+                android:gravity="center_vertical"
+                android:text="Trailer"
+                android:textColor="@color/yellow"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/movieActorInfo"
+                app:layout_constraintStart_toStartOf="@+id/movieActorInfo"
+                app:layout_constraintTop_toBottomOf="@+id/movieActorInfo" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTrailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movieActorInfo"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView19"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

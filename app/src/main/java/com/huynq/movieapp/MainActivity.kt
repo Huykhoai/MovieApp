@@ -1,17 +1,21 @@
 package com.huynq.movieapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.huynq.movieapp.view.intro.IntroFragment
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var bottomAppBar: BottomAppBar
     private lateinit var fab : FloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-         coordinatorLayout = findViewById(R.id.coordinator)
+         bottomAppBar = findViewById(R.id.bottom_app_bar)
          fab = findViewById(R.id.fab)
     }
 
@@ -35,13 +39,16 @@ class MainActivity : AppCompatActivity() {
     }
     fun setBottomNaviationVisibility(visibility: Int) {
         val isShow : Boolean = visibility == View.VISIBLE
-        val translation = coordinatorLayout.height.toFloat()
+        val translation = bottomAppBar.height.toFloat()
+        val frameLayout = findViewById<FrameLayout>(R.id.frameLayout_container)
+        val layoutParams = frameLayout.layoutParams as CoordinatorLayout.LayoutParams
+        val marginInPx = dpToPx(60,this )
         if(!isShow){
-            coordinatorLayout.animate()
+            bottomAppBar.animate()
                 .alpha(0f)
                 .translationY(translation)
                 .setDuration(1000)
-                .withEndAction{coordinatorLayout.visibility = View.GONE}
+                .withEndAction{bottomAppBar.visibility = View.GONE}
                 .start()
             fab.animate()
                 .alpha(0f)
@@ -49,11 +56,14 @@ class MainActivity : AppCompatActivity() {
                 .setDuration(1000)
                 .withEndAction{fab.visibility = View.GONE}
                 .start()
+
+            layoutParams.bottomMargin = 0
+            frameLayout.layoutParams = layoutParams
         }else{
-            coordinatorLayout.visibility = View.VISIBLE
+            bottomAppBar.visibility = View.VISIBLE
             fab.visibility = View.VISIBLE
 
-            coordinatorLayout.animate()
+            bottomAppBar.animate()
                 .alpha(1f)
                 .translationY(0f)
                 .setDuration(1000)
@@ -64,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                 .translationY(0f)
                 .setDuration(1000)
                 .start()
+            layoutParams.bottomMargin = marginInPx.toInt()
+            frameLayout.layoutParams = layoutParams
         }
+    }
+    fun dpToPx(dp: Int, context: Context): Float {
+        val density = context.resources.displayMetrics.density
+        return dp * density
     }
 }

@@ -105,7 +105,7 @@
                     android:layout_height="match_parent"
                     android:minHeight="200dp"
                     android:paddingHorizontal="12dp"
-                    android:paddingBottom="110dp"
+                    android:paddingBottom="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
