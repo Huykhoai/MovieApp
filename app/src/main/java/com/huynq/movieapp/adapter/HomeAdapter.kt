@@ -1,0 +1,62 @@
+package com.huynq.movieapp.adapter
+
+import android.text.TextUtils
+import android.util.DisplayMetrics
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.bumptech.glide.Glide
+import com.huynq.movieapp.MainActivity
+import com.huynq.movieapp.databinding.ViewholderFilmBinding
+import com.huynq.movieapp.model.Movies
+import com.huynq.movieapp.utils.APIConstants
+import com.huynq.movieapp.viewmodel.MainViewModel
+
+class HomeAdapter(
+    private val movies: List<Movies>,
+    private val mainViewModel: MainViewModel,
+    private val movieListRVAdapterClickListener: MovieListRVAdapterClickListener
+): RecyclerView.Adapter<HomeAdapter.MovieViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ViewholderFilmBinding.inflate(inflater, parent, false)
+        return MovieViewHolder(binding)
+    }
+
+    override fun getItemCount(): Int {
+        return movies.size
+    }
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        val movies = movies[position]
+        holder.bind(movies)
+        holder.itemView.setOnClickListener {
+           if(movieListRVAdapterClickListener != null){
+               movieListRVAdapterClickListener.onMovieClick(movies.id)
+           }
+        }
+    }
+    inner class MovieViewHolder(private val binding: ViewholderFilmBinding): RecyclerView.ViewHolder(binding.root){
+       fun bind(movie: Movies){
+           val imageUrl = APIConstants.IMAGE_PATH + movie.poster_path
+           binding.title.text = movie.title
+           binding.title.maxLines = 2
+           binding.title.ellipsize = TextUtils.TruncateAt.END
+           Glide.with(binding.pic.context).load(imageUrl).into(binding.pic)
+           val displayMetrics : DisplayMetrics = binding.pic.context.resources.displayMetrics
+           var widthScreen = displayMetrics.widthPixels
+
+           val constraintSet = ConstraintSet()
+           constraintSet.clone(binding.mainItemFilm)
+           constraintSet.constrainMaxWidth(binding.pic.id, widthScreen/3)
+           constraintSet.applyTo(binding.mainItemFilm)
+           binding.score.text = movie.vote_average.toString()
+       }
+    }
+    interface MovieListRVAdapterClickListener{
+       fun onMovieClick(movie_id: Int)
+    }
+}
