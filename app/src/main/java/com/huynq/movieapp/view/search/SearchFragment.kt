@@ -28,9 +28,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -63,6 +68,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         initView()
         setupRecycleView()
         displaySearch()
+        lifecycleScope.launch {
+            searchMovies()
+        }
     }
 
     private fun setupRecycleView() {
@@ -108,7 +116,54 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 binding?.recycleViewSearch?.visibility = View.GONE
             }
         }
+    }
+    private suspend fun searchMovies(){
+        binding?.editSearch!!.getQueryTextChangeStateFlow()
+            .debounce(300)
+            .filter {query ->
+                if(query.isEmpty()){
+                    withContext(Dispatchers.Main){
+                        binding?.searchResultTextView?.visibility = View.GONE
+                        binding?.recycleViewSearch?.visibility = View.GONE
+                    }
+                    return@filter false
+                }else{
+                    return@filter true
+                }
+            }
+            .distinctUntilChanged()
+            .flatMapLatest {query ->
+                dateFromNetwork(query)
+                    .catch {
+                        emitAll(flowOf(""))
+                    }
+                }
+            .flowOn(Dispatchers.Default)
+            .collect{result ->
+                mainViewModel.searchMovies(result,APIConstants.API_KEY)
+                binding?.recycleViewSearch?.visibility = View.VISIBLE
+            }
+    }
+    private fun SearchView.getQueryTextChangeStateFlow(): StateFlow<String>{
+        var query = MutableStateFlow("")
+        setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
 
+            override fun onQueryTextChange(newText: String?): Boolean {
+                query.value = newText.toString()
+                return true
+            }
+
+        })
+        return query
+    }
+    private fun dateFromNetwork(query: String): Flow<String>{
+        return flow {
+            delay(300)
+            emit(query)
+        }
     }
 }
 //suspend fun searchMovie(){

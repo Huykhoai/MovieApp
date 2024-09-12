@@ -51,7 +51,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <SearchView
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"
+                android:animateLayoutChanges="true"
+                android:baselineAligned="false"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:longClickable="true"
+                android:queryHint="Search Movies"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:ems="10"
+                android:inputType="text"
+                android:background="@drawable/search_edit_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleViewSearch"
                 android:layout_width="match_parent"
@@ -60,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_search" />
             <TextView
                 android:id="@+id/searchResultTextView"
                 android:layout_width="wrap_content"
