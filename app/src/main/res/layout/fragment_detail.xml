@@ -193,7 +193,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:drawableStart="@drawable/ic_person"
+                android:drawableStart="@drawable/ic_genres"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/yellow"
                 android:gravity="center_vertical"
@@ -236,12 +236,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:drawableStart="@drawable/ic_genres"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/yellow"
+                android:gravity="center_vertical"
+                android:text="Cast"
+                android:textColor="@color/yellow"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerViewTrailer"
+                app:layout_constraintStart_toStartOf="@+id/recyclerViewTrailer"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewTrailer" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:paddingBottom="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView19"
+                app:layout_constraintTop_toBottomOf="@+id/textView20"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

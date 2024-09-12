@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.huynq.movieapp.R
+import com.huynq.movieapp.adapter.CastAdapter
 import com.huynq.movieapp.adapter.TrailersMovieAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.data.MovieResponsitory
@@ -54,6 +55,8 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding?.detailLoading?.visibility = View.VISIBLE
+        Glide.with(this).clear(binding?.posterNomalImg!!)
+        Glide.with(this).clear(binding?.posterNomalImg!!)
         super.onViewCreated(view, savedInstanceState)
         initView()
         displayDetailMovies()
@@ -130,7 +133,11 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
                 mainViewModel.getCastsMovies(movie_id!!,APIConstants.API_KEY)
             }
             mainViewModel.castMoviesLiveData.observe(viewLifecycleOwner,Observer{
-                Log.d("Huy", "displayCastMovies:${it.cast.get(0).name} ")
+                if(!it.cast.isNullOrEmpty()){
+                    binding?.recyclerViewCast?.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    binding?.recyclerViewCast?.adapter = CastAdapter(it.cast)
+                }
                 checkDataLoaded()
             })
 
@@ -161,9 +168,8 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
             }, 500)
         }
     }
-    override fun onDestroyView() {
-        Glide.with(this).clear(binding?.posterNomalImg!!)
-        Glide.with(this).clear(binding?.posterNomalImg!!)
-        super.onDestroyView()
+    override fun onStart() {
+        super.onStart()
+
     }
 }

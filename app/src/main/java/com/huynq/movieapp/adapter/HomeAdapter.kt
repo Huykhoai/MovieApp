@@ -46,14 +46,7 @@ class HomeAdapter(
            binding.title.maxLines = 2
            binding.title.ellipsize = TextUtils.TruncateAt.END
            Glide.with(binding.pic.context).load(imageUrl).into(binding.pic)
-           val displayMetrics : DisplayMetrics = binding.pic.context.resources.displayMetrics
-           var widthScreen = displayMetrics.widthPixels
-
-           val constraintSet = ConstraintSet()
-           constraintSet.clone(binding.mainItemFilm)
-           constraintSet.constrainMaxWidth(binding.pic.id, widthScreen/3)
-           constraintSet.applyTo(binding.mainItemFilm)
-           binding.score.text = movie.vote_average.toString()
+           binding.score.text = movie.vote_average.toString().substring(0,3)
        }
     }
     interface MovieListRVAdapterClickListener{
