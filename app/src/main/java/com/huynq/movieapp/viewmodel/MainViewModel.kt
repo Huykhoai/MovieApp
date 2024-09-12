@@ -8,6 +8,7 @@ import com.huynq.movieapp.data.MovieResponsitory
 import com.huynq.movieapp.model.MovieDetails
 import com.huynq.movieapp.model.MovieResponse
 import com.huynq.movieapp.model.ResponseCast
+import com.huynq.movieapp.model.SearchResponse
 import com.huynq.movieapp.model.VideoResponse
 import javax.inject.Inject
 
@@ -26,6 +27,9 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
 
     private val _castMoviesLiveData = MutableLiveData<ResponseCast>()
     val castMoviesLiveData : LiveData<ResponseCast> get() =_castMoviesLiveData
+
+    private val _searchMoviesLiveData = MutableLiveData<SearchResponse>()
+    val searchMoviesLiveData : LiveData<SearchResponse> get() =_searchMoviesLiveData
 
     suspend fun getPopularMovies(api_key: String) {
         val response = responsitory.getPopularMovies(api_key)
@@ -81,6 +85,17 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
             }
         }else{
             Log.i("Retrofit", "getCastsMovies: ${response.errorBody()}")
+        }
+    }
+    suspend fun searchMovies(query: String, api_key: String){
+        val response = responsitory.searchMovies(query,api_key)
+        if(response.isSuccessful){
+            response.body()?.let {
+                _searchMoviesLiveData.postValue(it)
+                Log.i("Retrofit", "searchMovies: ${it} ")
+            }
+        }else{
+            Log.i("Retrofit", "Error : ${response.errorBody()}")
         }
     }
 }

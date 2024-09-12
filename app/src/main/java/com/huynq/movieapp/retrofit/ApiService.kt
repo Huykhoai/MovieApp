@@ -3,6 +3,7 @@ package com.huynq.movieapp.retrofit
 import com.huynq.movieapp.model.MovieDetails
 import com.huynq.movieapp.model.MovieResponse
 import com.huynq.movieapp.model.ResponseCast
+import com.huynq.movieapp.model.SearchResponse
 import com.huynq.movieapp.model.VideoResponse
 import com.huynq.movieapp.utils.APIConstants
 import retrofit2.Call
@@ -26,4 +27,6 @@ interface ApiService {
 
     @GET(APIConstants.VIDEO_DETAILS)
     suspend fun getVideoDetails(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String) : Response<VideoResponse>
+    @GET(APIConstants.MOVIE_SEARCH)
+    suspend fun searchMovies(@Query("query") query: String, @Query("api_key") api_key: String): Response<SearchResponse>
 }

@@ -1,11 +1,14 @@
 package com.huynq.movieapp.view.home
 
 import android.os.Bundle
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +22,7 @@ import com.huynq.movieapp.databinding.FragmentHomeBinding
 import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.view.detail.DetailFragment
+import com.huynq.movieapp.view.search.SearchFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +31,6 @@ import kotlinx.coroutines.withContext
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var listNewMovies: List<Movies>
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
@@ -44,9 +47,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
         initView()
         displayPopularMovies()
         displayUpCommingMovies()
+
     }
 
     private fun initView() {
+        binding?.editSearch?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+         override fun onQueryTextSubmit(query: String?): Boolean {
+             if(query != null && query.isNotEmpty()){
+                openScreen(SearchFragment.newInstance(query),true)
+             }
+             return true
+         }
+
+         override fun onQueryTextChange(newText: String?): Boolean {
+              return false
+         }
+
+     })
     }
     private fun displayPopularMovies(){
         lifecycleScope.launch {

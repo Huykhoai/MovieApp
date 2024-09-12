@@ -28,17 +28,19 @@
                 android:textSize="25sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="24dp"/>
-            <EditText
+            <SearchView
+                android:id="@+id/edit_search"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="16dp"
-                android:padding="12dp"
-                android:drawablePadding="8dp"
-                android:hint="Search Movies"
+                android:animateLayoutChanges="true"
+                android:baselineAligned="false"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:longClickable="true"
+                android:queryHint="Search Movies"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:drawableStart="@drawable/search"
-                android:drawableEnd="@drawable/microphone"
                 android:ems="10"
                 android:inputType="text"
                 android:background="@drawable/search_edit_background"/>
