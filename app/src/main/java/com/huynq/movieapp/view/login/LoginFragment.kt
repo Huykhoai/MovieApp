@@ -26,6 +26,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     }
 
     private fun initView() {
-        openScreen(HomeFragment(),true)
+        binding!!.btnLogin.setOnClickListener {
+            openScreen(HomeFragment(),true)
+        }
     }
 }
