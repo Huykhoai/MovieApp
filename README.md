@@ -1,12 +1,12 @@
 <h1 align="center">Android Movies App</h1>
-<h1 align="center">MVVM + Dagger hilt + Retrofit + Coroutines + Flow + Paging3 + Moshi</h1>
+<h1 align="center">MVVM + Dagger hilt + Retrofit + Coroutines + Flow</h1>
 
 <h4 align="center">
 	Discover the most popular and top rated movies playing. Movies data fetched using <a href="https://www.themoviedb.org/">themoviedb.org</a> API.
 </h4>
 
 ## ✨ Screenshots
-|                Splash                 |            Main Screen             |  Main Screen 2 |
+|                Splash                 |            Login Screen            |            Main Screen             |
 |:-:|:-:|:-:|
 | ![Fist](screenshots/ss1.png?raw=true) | ![2](screenshots/ss2.png?raw=true) | ![3](screenshots/ss3.png?raw=true) |
 |             Movie Details             |            Search movie            |
@@ -45,8 +45,6 @@ Create such application to learn and implement android's new features & framewor
 *   [Gson](https://github.com/google/gson) - for serialization/deserialization Java Objects into JSON and back
 *   [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 *   [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-*   [Paging](https://developer.android.com/topic/libraries/architecture/paging/)
 *   [DataBinding](https://developer.android.com/topic/libraries/data-binding/)
 *   [OkHttp](https://github.com/square/okhttp)
-*   [Kotlin Flow](https://developer.android.com/kotlin/flow)
-*   [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+*   [Kotlin Flow](https://developer.android.com/kotlin/flow) 
