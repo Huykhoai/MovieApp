@@ -3,6 +3,7 @@ package com.huynq.movieapp.utils
 object APIConstants {
     const val BASE_URL = "https://api.themoviedb.org/3/"
     const val API_KEY = "ce99ea84f89451260059c832125c6353"
+    const val DISCOVER_MOVIES = "discover/movie"
     const val POPULAR_MOVIES = "movie/popular"
     const val UPCOMMING_MOVIES = "movie/upcoming"
     const val GENRE_MOVIE_LIST = "genre/movie/list"

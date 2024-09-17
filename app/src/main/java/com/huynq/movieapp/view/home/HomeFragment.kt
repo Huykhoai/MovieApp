@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,19 +26,21 @@ import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.view.search.SearchFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MainViewModelFactory
+import com.huynq.movieapp.viewmodel.MovieViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private lateinit var mainViewModel: MainViewModel
+//    private val movieViewModel: MovieViewModel by viewModels()
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentHomeBinding {
-        var responsitory  = MovieResponsitory()
-        val viewModelFactory = MainViewModelFactory(responsitory)
-        mainViewModel =ViewModelProvider(requireActivity(),viewModelFactory)[MainViewModel::class.java]
+        val responsitory = MovieResponsitory()
+        val factory = MainViewModelFactory(responsitory)
+        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
         return FragmentHomeBinding.inflate(layoutInflater,container,false)
     }
 
@@ -67,7 +70,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     }
     private fun displayPopularMovies(){
         lifecycleScope.launch {
-            mainViewModel.getPopularMovies(APIConstants.API_KEY)
+            mainViewModel.getPopularMovies()
             withContext(Dispatchers.Main){
                 mainViewModel.popularMoviesLiveData.observe(viewLifecycleOwner, Observer {
                     if(it != null){
@@ -93,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private fun displayUpCommingMovies(){
         binding?.progressBarUpcommingMovie?.visibility = View.VISIBLE
         lifecycleScope.launch {
-            mainViewModel.getUpCommingMovies(APIConstants.API_KEY)
+            mainViewModel.getUpCommingMovies()
             withContext(Dispatchers.Main){
                 mainViewModel.upcommingMoviesLiveData.observe(viewLifecycleOwner, Observer {
                     if(it != null){

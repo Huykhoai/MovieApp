@@ -14,19 +14,28 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET(APIConstants.POPULAR_MOVIES)
-    suspend fun getPopularMovies(@Query("api_key") api_key: String): Response<MovieResponse>
+    suspend fun getPopularMovies(@Query("api_key") api_key: String, @Query("page") page: String)
+    : Response<MovieResponse>
 
     @GET(APIConstants.UPCOMMING_MOVIES)
-    suspend fun getUpCommingMovies(@Query("api_key") api_key: String): Response<MovieResponse>
+    suspend fun getUpCommingMovies(@Query("api_key") api_key: String, @Query("page") page: String)
+    : Response<MovieResponse>
 
     @GET(APIConstants.MOVIE_DETAILS)
-    suspend fun getDetailsMovies(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String): Response<MovieDetails>
+    suspend fun getDetailsMovies(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String)
+    : Response<MovieDetails>
 
     @GET(APIConstants.MOVIE_CREDITS)
-    suspend fun getMovieCredits(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String) : Response<ResponseCast>
+    suspend fun getMovieCredits(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String)
+    : Response<ResponseCast>
 
     @GET(APIConstants.VIDEO_DETAILS)
-    suspend fun getVideoDetails(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String) : Response<VideoResponse>
+    suspend fun getVideoDetails(@Path("movie_id") movie_id: Int, @Query("api_key") api_key: String)
+    : Response<VideoResponse>
     @GET(APIConstants.MOVIE_SEARCH)
-    suspend fun searchMovies(@Query("query") query: String, @Query("api_key") api_key: String): Response<SearchResponse>
+    suspend fun searchMovies(@Query("query") query: String, @Query("api_key") api_key: String)
+    : Response<SearchResponse>
+    @GET(APIConstants.DISCOVER_MOVIES)
+    suspend fun getDiscoverMovies(@Query("api_key") api_key: String, @Query("page") page: Int)
+    : Response<MovieResponse>
 }

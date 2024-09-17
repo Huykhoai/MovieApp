@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,8 +26,8 @@ import com.huynq.movieapp.model.Genre
 import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 
 class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private lateinit var mainViewModel: MainViewModel
@@ -46,10 +47,10 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
         layoutInflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentDetailBinding {
-        var responsitory = MovieResponsitory()
-        val viewModelFactory = MainViewModelFactory(responsitory)
-        mainViewModel = ViewModelProvider(requireActivity(),viewModelFactory)[MainViewModel::class.java]
         movie_id = arguments?.getInt("movie_id")
+        val responsitory = MovieResponsitory()
+        val factory = MainViewModelFactory(responsitory)
+        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
        return FragmentDetailBinding.inflate(layoutInflater,container,false)
     }
 
@@ -73,7 +74,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private fun displayDetailMovies() {
         lifecycleScope.launch {
             if (movie_id != null) {
-                mainViewModel.getDetailMovies(movie_id!!,APIConstants.API_KEY)
+                mainViewModel.getDetailMovies(movie_id!!)
             }
         }
         mainViewModel.detailMoviesLiveData.observe(viewLifecycleOwner, Observer {
@@ -105,7 +106,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     fun displayVideoMovies(){
         lifecycleScope.launch {
             if (movie_id != null) {
-                mainViewModel.getVideosMovies(movie_id!!,APIConstants.API_KEY)
+                mainViewModel.getVideosMovies(movie_id!!)
             }
             mainViewModel.videoMoviesLiveData.observe(viewLifecycleOwner, Observer {
                 trailerPaths.clear()
@@ -130,7 +131,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     fun displayCastMovies(){
         lifecycleScope.launch {
             if(movie_id != null){
-                mainViewModel.getCastsMovies(movie_id!!,APIConstants.API_KEY)
+                mainViewModel.getCastsMovies(movie_id!!)
             }
             mainViewModel.castMoviesLiveData.observe(viewLifecycleOwner,Observer{
                 if(!it.cast.isNullOrEmpty()){

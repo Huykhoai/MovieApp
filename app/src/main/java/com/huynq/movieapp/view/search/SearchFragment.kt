@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MainViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +41,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var searchAdapter: SearchAdapter
@@ -56,10 +57,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         layoutInflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentSearchBinding {
-        val responsitory = MovieResponsitory()
-        val mainViewModelFactory = MainViewModelFactory(responsitory)
-        mainViewModel = ViewModelProvider(requireActivity(),mainViewModelFactory)[MainViewModel::class.java]
         binding?.lifecycleOwner = this
+        val responsitory = MovieResponsitory()
+        val factory = MainViewModelFactory(responsitory)
+        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
        return FragmentSearchBinding.inflate(layoutInflater,container,false)
     }
 
@@ -93,7 +94,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         val query = arguments?.getString("query")
         if(query != null){
             lifecycleScope.launch {
-                mainViewModel.searchMovies(query,APIConstants.API_KEY)
+                mainViewModel.searchMovies(query)
             }
         }
         mainViewModel.searchMoviesLiveData.observe(viewLifecycleOwner, Observer {
@@ -140,7 +141,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 }
             .flowOn(Dispatchers.Default)
             .collect{result ->
-                mainViewModel.searchMovies(result,APIConstants.API_KEY)
+                mainViewModel.searchMovies(result)
                 binding?.recycleViewSearch?.visibility = View.VISIBLE
             }
     }
