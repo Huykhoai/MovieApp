@@ -1,14 +1,10 @@
 package com.huynq.movieapp.adapter
 
 import android.text.TextUtils
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
-import com.huynq.movieapp.MainActivity
 import com.huynq.movieapp.databinding.ViewholderFilmBinding
 import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.utils.APIConstants

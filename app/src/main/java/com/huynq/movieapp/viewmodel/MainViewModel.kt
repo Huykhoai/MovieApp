@@ -14,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class MainViewModel @Inject constructor(private val responsitory: MovieResponsitory) : ViewModel() {
      val popularMoviesLiveData = MutableLiveData<MovieResponse>()
      val upcommingMoviesLiveData = MutableLiveData<MovieResponse>()

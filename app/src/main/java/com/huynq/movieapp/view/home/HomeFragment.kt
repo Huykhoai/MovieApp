@@ -1,58 +1,54 @@
 package com.huynq.movieapp.view.home
 
 import android.os.Bundle
-import android.text.Editable
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huynq.movieapp.MainActivity
-import com.huynq.movieapp.R
+import com.huynq.movieapp.adapter.DiscoverMovieAdapter
 import com.huynq.movieapp.adapter.HomeAdapter
 import com.huynq.movieapp.base.BaseFragment
-import com.huynq.movieapp.data.MovieResponsitory
 import com.huynq.movieapp.databinding.FragmentHomeBinding
-import com.huynq.movieapp.model.Movies
-import com.huynq.movieapp.utils.APIConstants
+import com.huynq.movieapp.utils.ConnectionLiveData
 import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.view.search.SearchFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
-import com.huynq.movieapp.viewmodel.MainViewModelFactory
 import com.huynq.movieapp.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(){
-    private lateinit var mainViewModel: MainViewModel
-//    private val movieViewModel: MovieViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by viewModels()
+    @Inject
+    lateinit var discoverMovieAdapter: DiscoverMovieAdapter
+    private lateinit var cld : ConnectionLiveData
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentHomeBinding {
-        val responsitory = MovieResponsitory()
-        val factory = MainViewModelFactory(responsitory)
-        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
+        cld = ConnectionLiveData(requireActivity().application)
         return FragmentHomeBinding.inflate(layoutInflater,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding?.progressBarNewMovie?.visibility = View.VISIBLE
+        binding?.progressBarUpcommingMovie?.visibility = View.VISIBLE
         super.onViewCreated(view, savedInstanceState)
         initView()
-        displayPopularMovies()
-        displayUpCommingMovies()
-
+        initAPiCall()
     }
-
     private fun initView() {
         binding?.editSearch?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
          override fun onQueryTextSubmit(query: String?): Boolean {
@@ -68,51 +64,93 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
 
      })
     }
+    private fun initAPiCall() {
+        cld.observe(viewLifecycleOwner) { isConnected ->
+            if(isConnected){
+                mainViewModel.getPopularMovies()
+                mainViewModel.getUpCommingMovies()
+                displayPopularMovies()
+                displayUpCommingMovies()
+                displayDiscoverMovies()
+            }
+        }
+    }
     private fun displayPopularMovies(){
         lifecycleScope.launch {
-            mainViewModel.getPopularMovies()
             withContext(Dispatchers.Main){
                 mainViewModel.popularMoviesLiveData.observe(viewLifecycleOwner, Observer {
                     if(it != null){
-                        binding?.progressBarNewMovie?.visibility = View.GONE
-                        binding?.progressBarUpcommingMovie?.visibility = View.GONE
-                        binding?.recycleViewNewMovie?.adapter = HomeAdapter(
-                            it.results,
-                            mainViewModel,
-                            object : HomeAdapter.MovieListRVAdapterClickListener{
-                                override fun onMovieClick(movie_id: Int) {
-                                    openScreen(DetailFragment.newInstance(movie_id), true)
-                                }
-
-
-                            })
-                        binding?.recycleViewNewMovie?.layoutManager =
-                            LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                        binding!!.apply {
+                            progressBarNewMovie.visibility = View.GONE
+                            recycleViewNewMovie.apply {
+                                adapter = HomeAdapter(
+                                    it.results,
+                                    mainViewModel,
+                                    object : HomeAdapter.MovieListRVAdapterClickListener{
+                                        override fun onMovieClick(movie_id: Int) {
+                                            openScreen(DetailFragment.newInstance(movie_id), true)
+                                        }
+                                    })
+                                recycleViewNewMovie.layoutManager =
+                                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                            }
+                        }
                     }
                 })
             }
         }
     }
     private fun displayUpCommingMovies(){
-        binding?.progressBarUpcommingMovie?.visibility = View.VISIBLE
         lifecycleScope.launch {
-            mainViewModel.getUpCommingMovies()
             withContext(Dispatchers.Main){
                 mainViewModel.upcommingMoviesLiveData.observe(viewLifecycleOwner, Observer {
                     if(it != null){
-                        binding?.progressBarUpcommingMovie?.visibility = View.GONE
-                        binding?.recycleViewUpcommingMovie?.adapter = HomeAdapter(
-                            it.results,
-                            mainViewModel,
-                            object : HomeAdapter.MovieListRVAdapterClickListener{
-                                override fun onMovieClick(movie_id: Int) {
-                                    openScreen(DetailFragment.newInstance(movie_id), true)
-                                }
-                            })
-                        binding?.recycleViewUpcommingMovie?.layoutManager =
-                            LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                        binding!!.apply {
+                            progressBarUpcommingMovie.visibility = View.GONE
+                            recycleViewUpcommingMovie.apply {
+                                adapter = HomeAdapter(
+                                    it.results,
+                                    mainViewModel,
+                                    object : HomeAdapter.MovieListRVAdapterClickListener{
+                                        override fun onMovieClick(movie_id: Int) {
+                                            openScreen(DetailFragment.newInstance(movie_id), true)
+                                        }
+                                    })
+                                recycleViewUpcommingMovie.layoutManager =
+                                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                            }
+                        }
                     }
                 })
+            }
+        }
+    }
+    private fun displayDiscoverMovies(){
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+               movieViewModel.moviesResult.collectLatest{ response ->
+                   binding!!.apply {
+                       progressBarDiscoverMovie.visibility = View.GONE
+                       discoverMovieAdapter = DiscoverMovieAdapter()
+                       discoverMovieAdapter.setOnclickItem(
+                           object : DiscoverMovieAdapter.MovieListRVAdapterClickListener{
+                               override fun onMovieClick(movie_id: Int) {
+                                   openScreen(DetailFragment.newInstance(movie_id),true)
+                               }
+
+                           }
+                       )
+                       recycleViewDiscoverMovie.apply {
+                           adapter = discoverMovieAdapter
+                           layoutManager = LinearLayoutManager(
+                               activity,
+                               LinearLayoutManager.HORIZONTAL,
+                               false
+                           )
+                       }
+                   }
+                   discoverMovieAdapter.submitData(response)
+               }
             }
         }
     }

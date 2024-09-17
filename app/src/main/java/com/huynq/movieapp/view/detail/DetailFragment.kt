@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 class DetailFragment : BaseFragment<FragmentDetailBinding>() {
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
     private val trailerPaths = mutableListOf<String>()
     private var movie_id : Int? = null
     companion object{
@@ -48,9 +48,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
         container: ViewGroup?
     ): FragmentDetailBinding {
         movie_id = arguments?.getInt("movie_id")
-        val responsitory = MovieResponsitory()
-        val factory = MainViewModelFactory(responsitory)
-        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
        return FragmentDetailBinding.inflate(layoutInflater,container,false)
     }
 

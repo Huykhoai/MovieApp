@@ -13,7 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.huynq.movieapp.view.intro.IntroFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomAppBar: BottomAppBar
     private lateinit var fab : FloatingActionButton

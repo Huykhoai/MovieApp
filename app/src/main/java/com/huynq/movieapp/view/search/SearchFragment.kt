@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var searchAdapter: SearchAdapter
     companion object{
         fun newInstance(query: String): SearchFragment{
@@ -58,9 +58,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         container: ViewGroup?
     ): FragmentSearchBinding {
         binding?.lifecycleOwner = this
-        val responsitory = MovieResponsitory()
-        val factory = MainViewModelFactory(responsitory)
-        mainViewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
        return FragmentSearchBinding.inflate(layoutInflater,container,false)
     }
 

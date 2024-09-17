@@ -8,6 +8,7 @@ import com.huynq.movieapp.model.VideoResponse
 import com.huynq.movieapp.retrofit.ApiClient
 import com.huynq.movieapp.retrofit.ApiService
 import com.huynq.movieapp.utils.APIConstants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class MovieResponsitory @Inject constructor() {
-   private val apiService = ApiClient.createService(ApiService::class.java)
+   val apiService = ApiClient.createService(ApiService::class.java)
+
    fun getUpCommingMovies(): Flow<MovieResponse> = flow {
       val response = apiService.getUpCommingMovies(APIConstants.API_KEY, "1")
       emit(response.body()!!)
