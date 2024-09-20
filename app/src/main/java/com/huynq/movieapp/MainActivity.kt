@@ -10,8 +10,10 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.huynq.movieapp.view.favourite.FavouriteFragment
 import com.huynq.movieapp.view.intro.IntroFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,18 +26,20 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         initView()
-        openIntro()
+        openScreen(IntroFragment())
     }
 
     private fun initView() {
          bottomAppBar = findViewById(R.id.bottom_app_bar)
          fab = findViewById(R.id.fab)
+        fab.setOnClickListener{
+            openScreen(FavouriteFragment())
+        }
     }
 
-    private fun openIntro() {
+    private fun openScreen(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val fragment = IntroFragment()
         fragmentTransaction.add(R.id.frameLayout_container, fragment)
         fragmentTransaction.commit()
     }

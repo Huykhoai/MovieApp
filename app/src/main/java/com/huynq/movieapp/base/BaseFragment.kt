@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.huynq.movieapp.R
@@ -40,5 +42,20 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
             transaction?.addToBackStack(null)
         }
         transaction?.commit()
+    }
+    protected fun showSuccessDialog(content: String?) {
+        val dialog = Dialog(requireContext())
+        dialog.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+        dialog.window!!.setBackgroundDrawable(resources.getDrawable(R.drawable.custom_dialog_background))
+        dialog.setContentView(R.layout.layout_success_dialog)
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_success_content)
+        tvContent.text = content
+        val btnConfirm = dialog.findViewById<TextView>(R.id.btn_success_ok)
+        btnConfirm.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 }
