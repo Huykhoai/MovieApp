@@ -22,7 +22,6 @@ import com.huynq.movieapp.model.SearchResult
 import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
-import com.huynq.movieapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -40,7 +39,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var searchAdapter: SearchAdapter

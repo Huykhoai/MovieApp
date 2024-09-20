@@ -25,10 +25,9 @@ import com.huynq.movieapp.databinding.FragmentDetailBinding
 import com.huynq.movieapp.model.Genre
 import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.viewmodel.MainViewModel
-import com.huynq.movieapp.viewmodel.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private val mainViewModel: MainViewModel by viewModels()
     private val trailerPaths = mutableListOf<String>()

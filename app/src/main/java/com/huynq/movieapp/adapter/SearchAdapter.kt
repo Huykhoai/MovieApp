@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.huynq.movieapp.databinding.ItemSearchMovieBinding
-import com.huynq.movieapp.databinding.ViewholderFilmBinding
 import com.huynq.movieapp.model.SearchResult
-import com.huynq.movieapp.retrofit.ApiClient
 import com.huynq.movieapp.utils.APIConstants
 
 class SearchAdapter(

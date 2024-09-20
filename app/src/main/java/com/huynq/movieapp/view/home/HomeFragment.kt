@@ -8,14 +8,14 @@ import android.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huynq.movieapp.MainActivity
-import com.huynq.movieapp.adapter.DiscoverMovieAdapter
+import com.huynq.movieapp.adapter.DiscoverMovieHomeAdapter
 import com.huynq.movieapp.adapter.HomeAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentHomeBinding
 import com.huynq.movieapp.utils.ConnectionLiveData
+import com.huynq.movieapp.view.discoverMovie.DiscoverMoviesFragment
 import com.huynq.movieapp.view.detail.DetailFragment
 import com.huynq.movieapp.view.search.SearchFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private val mainViewModel: MainViewModel by viewModels()
     private val movieViewModel: MovieViewModel by viewModels()
     @Inject
-    lateinit var discoverMovieAdapter: DiscoverMovieAdapter
+    lateinit var discoverMovieAdapter: DiscoverMovieHomeAdapter
     private lateinit var cld : ConnectionLiveData
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
@@ -50,19 +50,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
         initAPiCall()
     }
     private fun initView() {
-        binding?.editSearch?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-         override fun onQueryTextSubmit(query: String?): Boolean {
-             if(query != null && query.isNotEmpty()){
-                openScreen(SearchFragment.newInstance(query),true)
-             }
-             return true
-         }
+        binding!!.apply {
+            editSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if(query != null && query.isNotEmpty()){
+                        openScreen(SearchFragment.newInstance(query),true)
+                    }
+                    return true
+                }
 
-         override fun onQueryTextChange(newText: String?): Boolean {
-              return false
-         }
-
-     })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+            btnSeeall.setOnClickListener {
+                openScreen(
+                    DiscoverMoviesFragment(),
+                    true
+                )}
+        }
     }
     private fun initAPiCall() {
         cld.observe(viewLifecycleOwner) { isConnected ->
@@ -131,9 +137,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                movieViewModel.moviesResult.collectLatest{ response ->
                    binding!!.apply {
                        progressBarDiscoverMovie.visibility = View.GONE
-                       discoverMovieAdapter = DiscoverMovieAdapter()
+                       discoverMovieAdapter = DiscoverMovieHomeAdapter()
                        discoverMovieAdapter.setOnclickItem(
-                           object : DiscoverMovieAdapter.MovieListRVAdapterClickListener{
+                           object : DiscoverMovieHomeAdapter.MovieListRVAdapterClickListener{
                                override fun onMovieClick(movie_id: Int) {
                                    openScreen(DetailFragment.newInstance(movie_id),true)
                                }
