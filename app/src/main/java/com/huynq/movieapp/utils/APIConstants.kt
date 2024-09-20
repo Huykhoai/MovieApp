@@ -13,4 +13,5 @@ object APIConstants {
     const val VIDEO_DETAILS = "movie/{movie_id}/videos"
     const val YOUTUBE_URL = "https://www.youtube.com/embed/"
     const val MOVIE_SEARCH = "search/movie"
+    const val TOP_RATED_MOVIES = "movie/top_rated"
 }

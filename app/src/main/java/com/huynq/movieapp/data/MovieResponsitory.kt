@@ -26,8 +26,8 @@ class MovieResponsitory @Inject constructor() {
       val response = apiService.getPopularMovies(APIConstants.API_KEY, "1")
       emit(response.body()!!)
    }.flowOn(Dispatchers.IO)
-   fun getDiscoverMovies(): Flow<MovieResponse> = flow {
-      val response = apiService.getDiscoverMovies(APIConstants.API_KEY, 1)
+   fun getToprateMovies(): Flow<MovieResponse> = flow {
+      val response = apiService.getToprateMovie(APIConstants.API_KEY, "1")
       emit(response.body()!!)
    }.flowOn(Dispatchers.IO)
    fun getSearchMovies(query: String): Flow<SearchResponse> = flow {

@@ -38,4 +38,7 @@ interface ApiService {
     @GET(APIConstants.DISCOVER_MOVIES)
     suspend fun getDiscoverMovies(@Query("api_key") api_key: String, @Query("page") page: Int)
     : Response<MovieResponse>
+    @GET(APIConstants.TOP_RATED_MOVIES)
+    suspend fun getToprateMovie(@Query("api_key") api_key: String, @Query("page") page: String)
+            : Response<MovieResponse>
 }

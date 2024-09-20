@@ -43,8 +43,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding?.progressBarNewMovie?.visibility = View.VISIBLE
-        binding?.progressBarUpcommingMovie?.visibility = View.VISIBLE
+        binding!!.apply {
+            progressBarNewMovie.visibility = View.VISIBLE
+            progressBarUpcommingMovie.visibility = View.VISIBLE
+            progressBarDiscoverMovie.visibility = View.VISIBLE
+            progressBarToprateMovie.visibility = View.VISIBLE
+        }
         super.onViewCreated(view, savedInstanceState)
         initView()
         initAPiCall()
@@ -75,9 +79,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
             if(isConnected){
                 mainViewModel.getPopularMovies()
                 mainViewModel.getUpCommingMovies()
+                mainViewModel.getTopRateMovies()
                 displayPopularMovies()
                 displayUpCommingMovies()
                 displayDiscoverMovies()
+                displayToprateMovies()
             }
         }
     }
@@ -157,6 +163,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                    }
                    discoverMovieAdapter.submitData(response)
                }
+            }
+        }
+    }
+    private fun displayToprateMovies(){
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                mainViewModel.topRateMoviesLiveData.observe(viewLifecycleOwner, Observer {
+                    if(it != null){
+                        binding!!.apply {
+                            progressBarToprateMovie.visibility = View.GONE
+                            recycleViewToprateMovie.apply {
+                                adapter = HomeAdapter(
+                                    it.results,
+                                    mainViewModel,
+                                    object : HomeAdapter.MovieListRVAdapterClickListener{
+                                        override fun onMovieClick(movie_id: Int) {
+                                            openScreen(DetailFragment.newInstance(movie_id), true)
+                                        }
+                                    })
+                                recycleViewToprateMovie.layoutManager =
+                                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                            }
+                        }
+                    }
+                })
             }
         }
     }

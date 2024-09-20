@@ -1,6 +1,8 @@
 package com.huynq.movieapp.view.discoverMovie
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,9 +56,13 @@ class DiscoverMoviesFragment : BaseFragment<FragmentDiscoverMoviesBinding>() {
             if(isConnected){
                 lifecycleScope.launch {
                     movieViewModel.moviesResult.collectLatest {response ->
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed({
+                            binding!!.proccessBar.visibility =View.GONE
+                        },500)
                         binding!!.apply {
-                            proccessBar.visibility = View.GONE
                             adapterDiscoverMovie.submitData(response)
+
                         }
                     }
                 }
