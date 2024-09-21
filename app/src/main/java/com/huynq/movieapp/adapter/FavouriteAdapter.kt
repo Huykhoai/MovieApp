@@ -2,21 +2,21 @@ package com.huynq.movieapp.adapter
 
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.huynq.movieapp.adapter.SearchAdapter.OnClickItemListener
 import com.huynq.movieapp.databinding.ItemSearchMovieBinding
 import com.huynq.movieapp.room.FavouriteMovie
-import com.huynq.movieapp.utils.APIConstants
 import javax.inject.Inject
 
 class FavouriteAdapter @Inject constructor(
-    var movies: List<FavouriteMovie>,
+    private var isClickChoose: Boolean,
     private val onClckItemListener: OnClickItemListener
 ) :
     RecyclerView.Adapter<FavouriteAdapter.ViewHolder>() {
-
+    private var movies: List<FavouriteMovie> = emptyList()
+    private var selectedList : MutableList<FavouriteMovie> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemSearchMovieBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -37,20 +37,54 @@ class FavouriteAdapter @Inject constructor(
     inner class ViewHolder(private val binding: ItemSearchMovieBinding)
         :RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: FavouriteMovie){
-            binding.title.text = movie.movie_name
-            binding.title.maxLines = 2
-            binding.title.ellipsize = TextUtils.TruncateAt.END
-            Glide.with(binding.pic.context).load(movie.movie_image).into(binding.pic)
-            binding.score.text = movie.movie_vote.toString().substring(0,3)
+            binding.apply {
+                title.text = movie.movie_name
+                title.maxLines = 2
+                title.ellipsize = TextUtils.TruncateAt.END
+                Glide.with(binding.pic.context).load(movie.movie_image).into(pic)
+                score.text = movie.movie_vote.toString().substring(0,3)
 
+                if(!isClickChoose){
+                    checkbox.visibility = View.GONE
+                    checkbox.isChecked = false
+                }
+                checkbox.setOnCheckedChangeListener{ _, isChecked ->
+                    if(isChecked){
+                        selectedList.add(movie)
+                    }else{
+                        selectedList.remove(movie)
+                        checkbox.visibility = View.GONE
+                    }
+                }
+            }
             itemView.setOnClickListener{
-                if(onClckItemListener != null){
-                    onClckItemListener.onClickItem(movie.movie_id)
+                if(isClickChoose){
+                    binding.apply {
+                        checkbox.visibility = View.VISIBLE
+                        checkbox.isChecked = isClickChoose
+                    }
+                }else{
+                    binding.apply {
+                        checkbox.visibility = View.GONE
+                        checkbox.isChecked = isClickChoose
+                    }
+                    if(onClckItemListener != null){
+                        onClckItemListener.onClickItem(movie)
+                    }
                 }
             }
         }
     }
     interface OnClickItemListener{
-        fun onClickItem(movie_id: Int)
+        fun onClickItem(movie: FavouriteMovie)
     }
+    fun updateMovies(newMovies: List<FavouriteMovie>) {
+        this.movies = newMovies
+        notifyDataSetChanged()
+    }
+    fun updateStatus(isCheck : Boolean){
+        this.isClickChoose = isCheck
+        notifyDataSetChanged()
+    }
+    fun getSelectedList() : MutableList<FavouriteMovie> = selectedList
 }
