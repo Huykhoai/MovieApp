@@ -11,6 +11,7 @@ import com.huynq.movieapp.room.FavouriteMovie
 import javax.inject.Inject
 
 class FavouriteAdapter @Inject constructor(
+    private var isChooseAll: Boolean,
     private var isClickChoose: Boolean,
     private val onClckItemListener: OnClickItemListener
 ) :
@@ -44,6 +45,13 @@ class FavouriteAdapter @Inject constructor(
                 Glide.with(binding.pic.context).load(movie.movie_image).into(pic)
                 score.text = movie.movie_vote.toString().substring(0,3)
 
+                if(isChooseAll){
+                    checkbox.visibility = View.VISIBLE
+                    checkbox.isChecked = isChooseAll
+                }else{
+                    checkbox.visibility = View.GONE
+                    checkbox.isChecked = isChooseAll
+                }
                 if(!isClickChoose){
                     checkbox.visibility = View.GONE
                     checkbox.isChecked = false
@@ -84,6 +92,10 @@ class FavouriteAdapter @Inject constructor(
     }
     fun updateStatus(isCheck : Boolean){
         this.isClickChoose = isCheck
+        notifyDataSetChanged()
+    }
+    fun updateStatusChooseAll(isCheck : Boolean){
+        this.isChooseAll = isCheck
         notifyDataSetChanged()
     }
     fun getSelectedList() : MutableList<FavouriteMovie> = selectedList

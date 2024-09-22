@@ -25,6 +25,7 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
     private val viewModel: FavouriteMovieViewModel by viewModels()
     private lateinit var favouriteAdapter: FavouriteAdapter
     private var isClickChoose: Boolean = false
+    private var isChooseAll: Boolean = false
     private var selectedList : MutableList<FavouriteMovie> = mutableListOf()
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
@@ -50,9 +51,11 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
               if(isClickChoose){
                   btnChoose.text = "Cancel"
                   btnDelete.visibility = View.VISIBLE
+                  btnChooseAll.visibility = View.VISIBLE
               }else{
                   btnChoose.text = "Choose"
                   btnDelete.visibility = View.GONE
+                  btnChooseAll.visibility = View.GONE
                   favouriteAdapter.updateStatus(isClickChoose)
               }
           }
@@ -69,6 +72,15 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
 
               }
           }
+          btnChooseAll.setOnCheckedChangeListener{_, isChecked ->
+              if(isChecked){
+                  isChooseAll = true
+                  favouriteAdapter.updateStatusChooseAll(isChooseAll)
+              }else{
+                  isChooseAll = false
+                  favouriteAdapter.updateStatusChooseAll(isChooseAll)
+              }
+          }
       }
     }
 
@@ -76,6 +88,7 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
         binding!!.apply {
             recycleViewDiscoverMovies.apply {
                 favouriteAdapter = FavouriteAdapter(
+                    isChooseAll,
                     isClickChoose,
                     object : FavouriteAdapter.OnClickItemListener{
                         override fun onClickItem(movie: FavouriteMovie) {
