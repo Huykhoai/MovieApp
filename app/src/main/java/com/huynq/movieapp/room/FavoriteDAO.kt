@@ -22,4 +22,7 @@ interface FavoriteDAO {
 
     @Query("SELECT * FROM favourite_movies WHERE movie_id = :movie_id LIMIT 1")
     suspend fun getMovieById(movie_id: Int):FavouriteMovie?
+
+    @Query("SELECT * FROM favourite_movies WHERE movie_name LIKE '%' || :movie_name || '%'")
+    suspend fun getMovieByName(movie_name: String): List<FavouriteMovie>
 }
