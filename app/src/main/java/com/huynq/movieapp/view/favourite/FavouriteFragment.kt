@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -83,6 +84,15 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
           btnBack.setOnClickListener{
               openScreen(HomeFragment(),true)
           }
+          requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+              object : OnBackPressedCallback(true) {
+                  override fun handleOnBackPressed() {
+                      isEnabled = false
+                      openScreen(HomeFragment(),true)
+                      return
+                  }
+
+              })
           btnChoose.setOnClickListener {
               isClickChoose = !isClickChoose
               favouriteAdapter.updateStatus(isClickChoose)

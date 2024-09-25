@@ -238,6 +238,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                     if(it != null){
                         binding!!.proccessBarNowplaying.visibility = View.GONE
                         banner(it)
+                        binding!!.circleIndicator.setViewPager(binding!!.viewpager)
                     }
                 }
             }
