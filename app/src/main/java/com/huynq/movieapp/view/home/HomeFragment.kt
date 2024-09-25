@@ -1,23 +1,26 @@
 package com.huynq.movieapp.view.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.huynq.movieapp.MainActivity
+import com.huynq.movieapp.adapter.BannerAdapter
 import com.huynq.movieapp.adapter.DiscoverMovieHomeAdapter
 import com.huynq.movieapp.adapter.HomeAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentHomeBinding
+import com.huynq.movieapp.model.Banner
+import com.huynq.movieapp.model.MovieResponse
 import com.huynq.movieapp.utils.ConnectionLiveData
-import com.huynq.movieapp.view.discoverMovie.DiscoverMoviesFragment
 import com.huynq.movieapp.view.detail.DetailFragment
-import com.huynq.movieapp.view.search.SearchFragment
+import com.huynq.movieapp.view.discoverMovie.DiscoverMoviesFragment
 import com.huynq.movieapp.viewmodel.MainViewModel
 import com.huynq.movieapp.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +36,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private val movieViewModel: MovieViewModel by viewModels()
     @Inject
     lateinit var discoverMovieAdapter: DiscoverMovieHomeAdapter
+    private lateinit var bannerAdapter: BannerAdapter
     private lateinit var cld : ConnectionLiveData
+    private lateinit var handle: Handler
+    private lateinit var runnable : Runnable
+    private val listImage: MutableList<Banner> = mutableListOf()
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
@@ -53,20 +60,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
         initView()
         initAPiCall()
     }
+    private fun startViewPager(){
+        binding!!.apply {
+            handle = Handler(Looper.getMainLooper())
+            runnable = Runnable{
+                var current = viewpager.currentItem
+                current = if(current == listImage.size-1) 0 else current + 1
+                viewpager.currentItem = current
+
+                handle.postDelayed(runnable,3000)
+            }
+            handle.postDelayed(runnable,3000)
+        }
+    }
+    private fun stopAutoViewPager() {
+        if (handle != null && runnable != null) {
+            handle.removeCallbacks(runnable)
+        }
+    }
+    private fun banner(list: MovieResponse) {
+        binding!!.apply {
+            bannerAdapter = BannerAdapter(requireContext())
+            viewpager.adapter = bannerAdapter
+            for (image in list.results){
+                val banner = Banner(image.poster_path,image.backdrop_path)
+                listImage.add(banner)
+            }
+            bannerAdapter.updateData(listImage)
+        }
+    }
+
     private fun initView() {
         binding!!.apply {
-            editSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if(query != null && query.isNotEmpty()){
-                        openScreen(SearchFragment.newInstance(query),true)
-                    }
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
             btnSeeall.setOnClickListener {
                 openScreen(
                     DiscoverMoviesFragment(),
@@ -77,9 +102,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private fun initAPiCall() {
         cld.observe(viewLifecycleOwner) { isConnected ->
             if(isConnected){
+                mainViewModel.getNowPlaying()
                 mainViewModel.getPopularMovies()
                 mainViewModel.getUpCommingMovies()
                 mainViewModel.getTopRateMovies()
+                displayNowPlaying()
                 displayPopularMovies()
                 displayUpCommingMovies()
                 displayDiscoverMovies()
@@ -191,8 +218,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
             }
         }
     }
+    private fun displayNowPlaying(){
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                mainViewModel.nowPlayingLiveData.observe(viewLifecycleOwner) {
+                    if(it != null){
+                        banner(it)
+                    }
+                }
+            }
+        }
+    }
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).setBottomNaviationVisibility(View.VISIBLE)
+    }
+    override fun onResume() {
+        super.onResume()
+        startViewPager()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAutoViewPager()
     }
 }

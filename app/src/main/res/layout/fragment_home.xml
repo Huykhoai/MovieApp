@@ -18,38 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-            <TextView
-                android:id="@+id/textView"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="What would you like to watch?"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="24dp"/>
-            <SearchView
-                android:id="@+id/edit_search"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="16dp"
-                android:animateLayoutChanges="true"
-                android:baselineAligned="false"
-                android:clickable="true"
-                android:contextClickable="true"
-                android:longClickable="true"
-                android:queryHint="Search Movies"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:ems="10"
-                android:inputType="text"
-                android:background="@drawable/search_edit_background"/>
+                android:layout_height="400dp" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Popular Movies"
                 android:textColor="#ffc107"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="12dp"

@@ -46,12 +46,8 @@ class MovieResponsitory @Inject constructor() {
       val response = apiService.getMovieCredits(movie_id, APIConstants.API_KEY)
       emit(response.body()!!)
    }.flowOn(Dispatchers.IO)
-
-
-//   suspend fun getPopularMovies(api_key: String) = restrofitService.getPopularMovies(api_key)
-//   suspend fun getUpCommingMovies(api_key: String) = restrofitService.getUpCommingMovies(api_key)
-//   suspend fun getDetailMovies(movie_id: Int,api_key: String) = restrofitService.getDetailsMovies(movie_id,api_key)
-//   suspend fun getVideos(movie_id: Int, api_key: String) = restrofitService.getVideoDetails(movie_id, api_key)
-//   suspend fun getCasts(movie_id: Int, api_key: String) = restrofitService.getMovieCredits(movie_id, api_key)
-//   suspend fun searchMovies(query: String, api_key: String) = restrofitService.searchMovies(query,api_key)
+   suspend fun getNowPlaying(): Flow<MovieResponse> = flow {
+      val response = apiService.getNowPlaying(APIConstants.API_KEY,"1")
+      emit(response.body()!!)
+   }.flowOn(Dispatchers.IO)
 }

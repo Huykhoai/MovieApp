@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
      val castMoviesLiveData = MutableLiveData<ResponseCast>()
      val searchMoviesLiveData = MutableLiveData<SearchResponse>()
      val topRateMoviesLiveData = MutableLiveData<MovieResponse>()
-
+     val nowPlayingLiveData = MutableLiveData<MovieResponse>()
      fun getPopularMovies() {
         viewModelScope.launch {
             responsitory.getPopularMovies()
@@ -99,6 +99,18 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
                 .collect{
                     Log.d("Huy", "topRateMovies:${it.results.get(0).id} ")
                     topRateMoviesLiveData.postValue(it)
+                }
+        }
+    }
+    fun getNowPlaying(){
+        viewModelScope.launch {
+            responsitory.getNowPlaying()
+                .catch { e ->
+                    Log.i("Retrofit", "getNowPlaying: ${e.message}")
+                }
+                .collect{
+                    Log.d("Huy", "getNowPlaying:${it.results}")
+                    nowPlayingLiveData.postValue(it)
                 }
         }
     }

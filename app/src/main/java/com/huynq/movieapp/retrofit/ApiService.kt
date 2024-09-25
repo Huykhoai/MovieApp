@@ -6,6 +6,7 @@ import com.huynq.movieapp.model.ResponseCast
 import com.huynq.movieapp.model.SearchResponse
 import com.huynq.movieapp.model.VideoResponse
 import com.huynq.movieapp.utils.APIConstants
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -40,5 +41,8 @@ interface ApiService {
     : Response<MovieResponse>
     @GET(APIConstants.TOP_RATED_MOVIES)
     suspend fun getToprateMovie(@Query("api_key") api_key: String, @Query("page") page: String)
+            : Response<MovieResponse>
+    @GET(APIConstants.NOW_PLAYING)
+    suspend fun getNowPlaying(@Query("api_key") api_key: String, @Query("page") page: String)
             : Response<MovieResponse>
 }
