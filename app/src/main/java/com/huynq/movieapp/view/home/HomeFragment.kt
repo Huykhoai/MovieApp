@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.huynq.movieapp.MainActivity
 import com.huynq.movieapp.adapter.BannerAdapter
 import com.huynq.movieapp.adapter.DiscoverMovieHomeAdapter
@@ -55,6 +56,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
             progressBarUpcommingMovie.visibility = View.VISIBLE
             progressBarDiscoverMovie.visibility = View.VISIBLE
             progressBarToprateMovie.visibility = View.VISIBLE
+            proccessBarNowplaying.visibility = View.VISIBLE
         }
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -68,9 +70,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                 current = if(current == listImage.size-1) 0 else current + 1
                 viewpager.currentItem = current
 
-                handle.postDelayed(runnable,3000)
             }
-            handle.postDelayed(runnable,3000)
         }
     }
     private fun stopAutoViewPager() {
@@ -80,13 +80,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     }
     private fun banner(list: MovieResponse) {
         binding!!.apply {
-            bannerAdapter = BannerAdapter(requireContext())
+            bannerAdapter = BannerAdapter(
+                requireContext(),
+                object : BannerAdapter.OnClickBannerListener{
+                    override fun OnClickItemListener(movie_id: Int) {
+                        openScreen(DetailFragment.newInstance(movie_id),true)
+                    }
+                })
             viewpager.adapter = bannerAdapter
             for (image in list.results){
-                val banner = Banner(image.poster_path,image.backdrop_path)
+                val banner = Banner(image.id,image.poster_path,image.backdrop_path)
                 listImage.add(banner)
             }
             bannerAdapter.updateData(listImage)
+            viewpager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    handle.removeCallbacks(runnable)
+                    handle.postDelayed(runnable,3000)
+                }
+            })
         }
     }
 
@@ -223,6 +236,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
             withContext(Dispatchers.Main){
                 mainViewModel.nowPlayingLiveData.observe(viewLifecycleOwner) {
                     if(it != null){
+                        binding!!.proccessBarNowplaying.visibility = View.GONE
                         banner(it)
                     }
                 }

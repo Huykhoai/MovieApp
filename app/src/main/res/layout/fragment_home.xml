@@ -18,10 +18,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewpager"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="wrap_content">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/proccessBar_nowplaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/yellow"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+                    app:layout_constraintEnd_toEndOf="@+id/viewpager"
+                    app:layout_constraintStart_toStartOf="@+id/viewpager"
+                    app:layout_constraintTop_toTopOf="@+id/viewpager" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
