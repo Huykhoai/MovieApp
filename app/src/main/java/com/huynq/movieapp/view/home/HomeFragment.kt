@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +44,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private lateinit var handle: Handler
     private lateinit var runnable : Runnable
     private val listImage: MutableList<Banner> = mutableListOf()
+    private var doubleBackToExitPressedOnce: Boolean = false
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
@@ -110,6 +113,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                     DiscoverMoviesFragment(),
                     true
                 )}
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if(doubleBackToExitPressedOnce){
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                            return
+                        }
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(requireActivity().application,"Press BACK again to exit", Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        },2000)
+                    }
+
+                })
         }
     }
     private fun initAPiCall() {

@@ -20,18 +20,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/bg_circle_dark"
-                android:padding="8dp"
-                android:src="@drawable/back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

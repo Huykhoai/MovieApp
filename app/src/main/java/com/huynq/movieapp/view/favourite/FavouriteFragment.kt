@@ -81,15 +81,9 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
 
     private fun initView() {
       binding!!.apply {
-          btnBack.setOnClickListener{
-              openScreen(HomeFragment(),true)
-          }
           requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
               object : OnBackPressedCallback(true) {
                   override fun handleOnBackPressed() {
-                      isEnabled = false
-                      openScreen(HomeFragment(),true)
-                      return
                   }
 
               })

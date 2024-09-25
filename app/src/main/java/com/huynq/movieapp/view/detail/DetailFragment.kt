@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.huynq.movieapp.MainActivity
 import com.huynq.movieapp.R
 import com.huynq.movieapp.adapter.CastAdapter
 import com.huynq.movieapp.adapter.TrailersMovieAdapter
@@ -203,6 +204,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     }
     override fun onStart() {
         super.onStart()
-
+        (activity as MainActivity).setBottomNaviationVisibility(View.GONE)
     }
 }
