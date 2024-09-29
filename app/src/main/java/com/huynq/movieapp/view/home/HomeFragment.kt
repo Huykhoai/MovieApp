@@ -54,13 +54,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding!!.apply {
-            progressBarNewMovie.visibility = View.VISIBLE
-            progressBarUpcommingMovie.visibility = View.VISIBLE
-            progressBarDiscoverMovie.visibility = View.VISIBLE
-            progressBarToprateMovie.visibility = View.VISIBLE
-            proccessBarNowplaying.visibility = View.VISIBLE
-        }
         super.onViewCreated(view, savedInstanceState)
         initView()
         initAPiCall()
@@ -266,6 +259,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).setBottomNaviationVisibility(View.VISIBLE)
+        binding!!.apply {
+            progressBarNewMovie.visibility = View.VISIBLE
+            progressBarUpcommingMovie.visibility = View.VISIBLE
+            progressBarDiscoverMovie.visibility = View.VISIBLE
+            progressBarToprateMovie.visibility = View.VISIBLE
+            proccessBarNowplaying.visibility = View.VISIBLE
+        }
     }
     override fun onResume() {
         super.onResume()

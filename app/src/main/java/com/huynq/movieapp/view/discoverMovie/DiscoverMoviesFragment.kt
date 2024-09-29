@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import com.huynq.movieapp.MainActivity
 import com.huynq.movieapp.adapter.DiscoverMovieAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentDiscoverMoviesBinding
@@ -50,7 +51,17 @@ class DiscoverMoviesFragment : BaseFragment<FragmentDiscoverMoviesBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setupRecycleView()
         initAPiCall()
+        initView()
     }
+
+    private fun initView() {
+        binding!!.apply {
+            btnBack.setOnClickListener{
+                onBack()
+            }
+        }
+    }
+
     private fun initAPiCall() {
         cld.observe(viewLifecycleOwner) { isConnected ->
             if(isConnected){
@@ -82,5 +93,10 @@ class DiscoverMoviesFragment : BaseFragment<FragmentDiscoverMoviesBinding>() {
                 })
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).setBottomNaviationVisibility(View.GONE)
     }
 }

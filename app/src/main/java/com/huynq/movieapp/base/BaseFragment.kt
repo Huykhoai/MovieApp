@@ -44,6 +44,9 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         }
         transaction?.commit()
     }
+    protected fun onBack(){
+        requireActivity().supportFragmentManager.popBackStack()
+    }
     protected fun showDialog(title: String?, content: String?, onConfirm: Runnable) {
         val dialog = Dialog(requireContext())
         dialog.window!!.setLayout(

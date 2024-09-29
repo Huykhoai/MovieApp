@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -81,6 +82,10 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
 
     implementation ("me.relex:circleindicator:2.1.6")
+    // Hoặc phiên bản mới nhất
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.0")
+
 }
 kapt {
     correctErrorTypes = true

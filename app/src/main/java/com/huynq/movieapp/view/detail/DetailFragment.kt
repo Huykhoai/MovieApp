@@ -5,23 +5,18 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.huynq.movieapp.MainActivity
-import com.huynq.movieapp.R
 import com.huynq.movieapp.adapter.CastAdapter
 import com.huynq.movieapp.adapter.TrailersMovieAdapter
 import com.huynq.movieapp.base.BaseFragment
-import com.huynq.movieapp.data.MovieResponsitory
 import com.huynq.movieapp.databinding.FragmentDetailBinding
 import com.huynq.movieapp.model.Genre
 import com.huynq.movieapp.room.FavouriteMovie
@@ -72,7 +67,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private fun initView() {
         binding!!.apply {
             btnBack.setOnClickListener {
-                activity?.onBackPressed()
+                onBack()
             }
             btnFavorite.setOnClickListener {
                 lifecycleScope.launch {
