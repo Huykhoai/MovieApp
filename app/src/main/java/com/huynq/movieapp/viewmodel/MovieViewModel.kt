@@ -9,6 +9,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.pages.PageSource
+import com.huynq.movieapp.pages.PageSourcePopular
+import com.huynq.movieapp.pages.PageSourceTopRate
+import com.huynq.movieapp.pages.PageSourceUpComing
 import com.huynq.movieapp.retrofit.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -22,5 +25,26 @@ class MovieViewModel @Inject constructor(apiService: ApiService): ViewModel(){
         }.flow.cachedIn(viewModelScope)
             .catch {
                 Log.e("MoviesViewModel", ":${it} ", )
+            }
+    val popularMoviesResult : Flow<PagingData<Movies>> =
+        Pager(config = PagingConfig(10, enablePlaceholders = false)){
+            PageSourcePopular(apiService)
+        }.flow.cachedIn(viewModelScope)
+            .catch {
+                Log.e("Huy", ": ${it}",)
+            }
+    val upcomingMovieResult : Flow<PagingData<Movies>> =
+        Pager(config = PagingConfig(10, enablePlaceholders = false)){
+            PageSourceUpComing(apiService)
+        }.flow.cachedIn(viewModelScope)
+            .catch {
+                Log.e("Huy", ": ${it}",)
+        }
+    val topRateMovieResult : Flow<PagingData<Movies>> =
+        Pager(config = PagingConfig(10, enablePlaceholders = false)){
+            PageSourceTopRate(apiService)
+        }.flow.cachedIn(viewModelScope)
+            .catch {
+                Log.e("Huy", ": ${it}", )
             }
 }

@@ -8,9 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.huynq.movieapp.MainActivity
@@ -37,8 +41,6 @@ import javax.inject.Inject
 class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private val mainViewModel: MainViewModel by viewModels()
     private val movieViewModel: MovieViewModel by viewModels()
-    @Inject
-    lateinit var discoverMovieAdapter: DiscoverMovieHomeAdapter
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var cld : ConnectionLiveData
     private lateinit var handle: Handler
@@ -128,9 +130,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
         cld.observe(viewLifecycleOwner) { isConnected ->
             if(isConnected){
                 mainViewModel.getNowPlaying()
-                mainViewModel.getPopularMovies()
-                mainViewModel.getUpCommingMovies()
-                mainViewModel.getTopRateMovies()
+//                mainViewModel.getPopularMovies()
+//                mainViewModel.getUpCommingMovies()
+//                mainViewModel.getTopRateMovies()
                 displayNowPlaying()
                 displayPopularMovies()
                 displayUpCommingMovies()
@@ -142,50 +144,56 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private fun displayPopularMovies(){
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
-                mainViewModel.popularMoviesLiveData.observe(viewLifecycleOwner, Observer {
-                    if(it != null){
-                        binding!!.apply {
-                            progressBarNewMovie.visibility = View.GONE
-                            recycleViewNewMovie.apply {
-                                adapter = HomeAdapter(
-                                    it.results,
-                                    mainViewModel,
-                                    object : HomeAdapter.MovieListRVAdapterClickListener{
-                                        override fun onMovieClick(movie_id: Int) {
-                                            openScreen(DetailFragment.newInstance(movie_id), true)
-                                        }
-                                    })
-                                recycleViewNewMovie.layoutManager =
-                                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-                            }
-                        }
-                    }
-                })
+               movieViewModel.moviesResult.collectLatest { response ->
+                   if(response != null){
+                       binding!!.apply {
+                           progressBarNewMovie.visibility = View.GONE
+                           recycleViewNewMovie.apply {
+                               var discoverMovieAdapter = DiscoverMovieHomeAdapter()
+                               discoverMovieAdapter.setOnclickItem(
+                                   object : DiscoverMovieHomeAdapter.MovieListRVAdapterClickListener{
+                                       override fun onMovieClick(movie_id: Int) {
+                                           openScreen(DetailFragment.newInstance(movie_id),true)
+                                       }
+                                   }
+                               )
+                               recycleViewNewMovie.apply {
+                                   adapter = discoverMovieAdapter
+                                   layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                               }
+                               discoverMovieAdapter.submitData(response)
+                           }
+                       }
+                   }
+               }
             }
         }
     }
     private fun displayUpCommingMovies(){
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
-                mainViewModel.upcommingMoviesLiveData.observe(viewLifecycleOwner, Observer {
-                    if(it != null){
+                movieViewModel.upcomingMovieResult.collectLatest{response ->
+                    if(response != null){
                         binding!!.apply {
                             progressBarUpcommingMovie.visibility = View.GONE
+                            var upcommingMovieAdapter = DiscoverMovieHomeAdapter()
                             recycleViewUpcommingMovie.apply {
-                                adapter = HomeAdapter(
-                                    it.results,
-                                    mainViewModel,
-                                    object : HomeAdapter.MovieListRVAdapterClickListener{
+                                upcommingMovieAdapter.setOnclickItem(
+                                    object : DiscoverMovieHomeAdapter.MovieListRVAdapterClickListener{
                                         override fun onMovieClick(movie_id: Int) {
-                                            openScreen(DetailFragment.newInstance(movie_id), true)
+                                            openScreen(DetailFragment.newInstance(movie_id),true)
                                         }
-                                    })
-                                recycleViewUpcommingMovie.layoutManager =
+
+                                    }
+                                )
+                                adapter = upcommingMovieAdapter
+                                layoutManager =
                                     LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
                             }
+                            upcommingMovieAdapter.submitData(response)
                         }
                     }
-                })
+                }
             }
         }
     }
@@ -195,7 +203,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                movieViewModel.moviesResult.collectLatest{ response ->
                    binding!!.apply {
                        progressBarDiscoverMovie.visibility = View.GONE
-                       discoverMovieAdapter = DiscoverMovieHomeAdapter()
+                       var discoverMovieAdapter = DiscoverMovieHomeAdapter()
                        discoverMovieAdapter.setOnclickItem(
                            object : DiscoverMovieHomeAdapter.MovieListRVAdapterClickListener{
                                override fun onMovieClick(movie_id: Int) {
@@ -212,8 +220,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
                                false
                            )
                        }
+                       discoverMovieAdapter.submitData(response)
                    }
-                   discoverMovieAdapter.submitData(response)
                }
             }
         }
@@ -221,25 +229,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
     private fun displayToprateMovies(){
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
-                mainViewModel.topRateMoviesLiveData.observe(viewLifecycleOwner, Observer {
-                    if(it != null){
-                        binding!!.apply {
-                            progressBarToprateMovie.visibility = View.GONE
-                            recycleViewToprateMovie.apply {
-                                adapter = HomeAdapter(
-                                    it.results,
-                                    mainViewModel,
-                                    object : HomeAdapter.MovieListRVAdapterClickListener{
-                                        override fun onMovieClick(movie_id: Int) {
-                                            openScreen(DetailFragment.newInstance(movie_id), true)
-                                        }
-                                    })
-                                recycleViewToprateMovie.layoutManager =
-                                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-                            }
-                        }
-                    }
-                })
+               movieViewModel.topRateMovieResult.collectLatest { response->
+                   if(response != null){
+                       binding!!.apply {
+                           progressBarToprateMovie.visibility = View.GONE
+                           var discoverMovieAdapter = DiscoverMovieHomeAdapter()
+                           recycleViewToprateMovie.apply {
+                               discoverMovieAdapter.setOnclickItem(
+                                   object : DiscoverMovieHomeAdapter.MovieListRVAdapterClickListener{
+                                       override fun onMovieClick(movie_id: Int) {
+                                           openScreen(DetailFragment.newInstance(movie_id), true)
+                                       }
+                                   })
+                               layoutManager =
+                                   LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                               adapter = discoverMovieAdapter
+                           }
+                           discoverMovieAdapter.submitData(response)
+                       }
+                   }
+               }
             }
         }
     }

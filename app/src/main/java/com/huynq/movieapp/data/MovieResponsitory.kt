@@ -18,18 +18,18 @@ import javax.inject.Inject
 class MovieResponsitory @Inject constructor() {
    val apiService = ApiClient.createService(ApiService::class.java)
 
-   fun getUpCommingMovies(): Flow<MovieResponse> = flow {
-      val response = apiService.getUpCommingMovies(APIConstants.API_KEY, "1")
-      emit(response.body()!!)
-   }.flowOn(Dispatchers.IO)
-   fun getPopularMovies(): Flow<MovieResponse> = flow {
-      val response = apiService.getPopularMovies(APIConstants.API_KEY, "1")
-      emit(response.body()!!)
-   }.flowOn(Dispatchers.IO)
-   fun getToprateMovies(): Flow<MovieResponse> = flow {
-      val response = apiService.getToprateMovie(APIConstants.API_KEY, "1")
-      emit(response.body()!!)
-   }.flowOn(Dispatchers.IO)
+//   fun getUpCommingMovies(): Flow<MovieResponse> = flow {
+//      val response = apiService.getUpCommingMovies(APIConstants.API_KEY, "1")
+//      emit(response.body()!!)
+//   }.flowOn(Dispatchers.IO)
+//   fun getPopularMovies(): Flow<MovieResponse> = flow {
+//      val response = apiService.getPopularMovies(APIConstants.API_KEY, "1")
+//      emit(response.body()!!)
+//   }.flowOn(Dispatchers.IO)
+//   fun getToprateMovies(): Flow<MovieResponse> = flow {
+//      val response = apiService.getToprateMovie(APIConstants.API_KEY, "1")
+//      emit(response.body()!!)
+//   }.flowOn(Dispatchers.IO)
    fun getSearchMovies(query: String): Flow<SearchResponse> = flow {
       val response = apiService.searchMovies(query, APIConstants.API_KEY)
       emit(response.body()!!)

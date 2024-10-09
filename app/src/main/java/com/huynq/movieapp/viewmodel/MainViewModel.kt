@@ -24,28 +24,28 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
      val searchMoviesLiveData = MutableLiveData<SearchResponse>()
      val topRateMoviesLiveData = MutableLiveData<MovieResponse>()
      val nowPlayingLiveData = MutableLiveData<MovieResponse>()
-     fun getPopularMovies() {
-        viewModelScope.launch {
-            responsitory.getPopularMovies()
-                .catch {e->
-                    Log.i("Retrofit", "getPopularMovies: ${e.message}")
-                }
-                .collect {
-                    popularMoviesLiveData.postValue(it)
-                }
-        }
-    }
-     fun getUpCommingMovies(){
-        viewModelScope.launch {
-            responsitory.getUpCommingMovies()
-                .catch { e->
-                    Log.i("Retrofit", "getUpCommingMovies: ${e.message}")
-                }
-                .collect{
-                    upcommingMoviesLiveData.postValue(it)
-                }
-        }
-    }
+//     fun getPopularMovies() {
+//        viewModelScope.launch {
+//            responsitory.getPopularMovies()
+//                .catch {e->
+//                    Log.i("Retrofit", "getPopularMovies: ${e.message}")
+//                }
+//                .collect {
+//                    popularMoviesLiveData.postValue(it)
+//                }
+//        }
+//    }
+//     fun getUpCommingMovies(){
+//        viewModelScope.launch {
+//            responsitory.getUpCommingMovies()
+//                .catch { e->
+//                    Log.i("Retrofit", "getUpCommingMovies: ${e.message}")
+//                }
+//                .collect{
+//                    upcommingMoviesLiveData.postValue(it)
+//                }
+//        }
+//    }
     fun getDetailMovies(movie_id: Int) {
         viewModelScope.launch {
             responsitory.getDetailMovies(movie_id)
@@ -90,18 +90,18 @@ class MainViewModel @Inject constructor(private val responsitory: MovieResponsit
                }
        }
     }
-    fun getTopRateMovies(){
-        viewModelScope.launch {
-            responsitory.getToprateMovies()
-                .catch { e->
-                    Log.i("Retrofit", "topRateMovies: ${e.message}")
-                }
-                .collect{
-                    Log.d("Huy", "topRateMovies:${it.results.get(0).id} ")
-                    topRateMoviesLiveData.postValue(it)
-                }
-        }
-    }
+//    fun getTopRateMovies(){
+//        viewModelScope.launch {
+//            responsitory.getToprateMovies()
+//                .catch { e->
+//                    Log.i("Retrofit", "topRateMovies: ${e.message}")
+//                }
+//                .collect{
+//                    Log.d("Huy", "topRateMovies:${it.results.get(0).id} ")
+//                    topRateMoviesLiveData.postValue(it)
+//                }
+//        }
+//    }
     fun getNowPlaying(){
         viewModelScope.launch {
             responsitory.getNowPlaying()

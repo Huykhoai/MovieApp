@@ -15,11 +15,11 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET(APIConstants.POPULAR_MOVIES)
-    suspend fun getPopularMovies(@Query("api_key") api_key: String, @Query("page") page: String)
+    suspend fun getPopularMovies(@Query("api_key") api_key: String, @Query("page") page: Int)
     : Response<MovieResponse>
 
     @GET(APIConstants.UPCOMMING_MOVIES)
-    suspend fun getUpCommingMovies(@Query("api_key") api_key: String, @Query("page") page: String)
+    suspend fun getUpCommingMovies(@Query("api_key") api_key: String, @Query("page") page: Int)
     : Response<MovieResponse>
 
     @GET(APIConstants.MOVIE_DETAILS)
@@ -40,7 +40,7 @@ interface ApiService {
     suspend fun getDiscoverMovies(@Query("api_key") api_key: String, @Query("page") page: Int)
     : Response<MovieResponse>
     @GET(APIConstants.TOP_RATED_MOVIES)
-    suspend fun getToprateMovie(@Query("api_key") api_key: String, @Query("page") page: String)
+    suspend fun getToprateMovie(@Query("api_key") api_key: String, @Query("page") page: Int)
             : Response<MovieResponse>
     @GET(APIConstants.NOW_PLAYING)
     suspend fun getNowPlaying(@Query("api_key") api_key: String, @Query("page") page: String)
