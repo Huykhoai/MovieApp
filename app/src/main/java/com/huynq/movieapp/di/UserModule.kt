@@ -1,29 +1,28 @@
 package com.huynq.movieapp.di
 
-import com.huynq.movieapp.retrofit.ApiClient
 import com.huynq.movieapp.retrofit.ApiService
+import com.huynq.movieapp.retrofit.ApiUser
+import com.huynq.movieapp.retrofit.ApiUserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-
 import retrofit2.Retrofit
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkingModule {
+object UserModule {
     @Provides
     @Singleton
-    @Named("apiClient")
-    fun provideApiClient(): Retrofit {
-        return ApiClient.retrofit
+    @Named("apiUser")
+    fun provideApiUser(): Retrofit {
+        return ApiUser.retrofit
     }
-
     @Provides
     @Singleton
-    fun provideApiService(@Named("apiClient")retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideUserService(@Named("apiUser") retrofit: Retrofit): ApiUserService {
+        return retrofit.create(ApiUserService::class.java)
     }
 }

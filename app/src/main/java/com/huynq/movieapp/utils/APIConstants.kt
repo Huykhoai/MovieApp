@@ -15,4 +15,8 @@ object APIConstants {
     const val MOVIE_SEARCH = "search/movie"
     const val TOP_RATED_MOVIES = "movie/top_rated"
     const val NOW_PLAYING = "movie/now_playing"
+
+    const val URL_USER = "http://192.168.124.12:3000"
+    const val LOGIN = "/api/post/login_user"
+    const val RESISTER = "/api/post/create_user"
 }
