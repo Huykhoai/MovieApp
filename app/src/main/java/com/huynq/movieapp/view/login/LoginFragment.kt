@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -14,10 +15,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import com.huynq.movieapp.R
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentLoginBinding
 import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.view.home.HomeFragment
+import com.huynq.movieapp.view.register.RegisterFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,7 +28,8 @@ import java.util.regex.Pattern
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>() {
-    private var doubleBackToExitPressedOnce: Boolean = false
+    private var doubleBackToExitPressedOnce = false
+    private var password = false
     private val userModel: UserModel by viewModels()
     override fun getFragmentBinding(
         layoutInflater: LayoutInflater,
@@ -61,29 +65,47 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     }
 
     private fun initView() {
-        binding!!.btnLogin.setOnClickListener {
-            login()
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (doubleBackToExitPressedOnce) {
-                        isEnabled = false
-                        requireActivity().onBackPressed()
-                        return
+        binding!!.apply {
+            btnLogin.setOnClickListener {
+                login()
+            }
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (doubleBackToExitPressedOnce) {
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                            return
+                        }
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(
+                            requireActivity().application,
+                            "Press BACK again to exit",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        }, 2000)
                     }
-                    doubleBackToExitPressedOnce = true
-                    Toast.makeText(
-                        requireActivity().application,
-                        "Press BACK again to exit",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        doubleBackToExitPressedOnce = false
-                    }, 2000)
-                }
 
-            })
+                })
+            btnNavSignup.setOnClickListener {
+                openScreen(RegisterFragment(), true)
+            }
+            hidePassword.setOnClickListener{
+                password = !password
+                if(password){
+                    editPasswordLogin.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    hidePassword.setImageResource(R.drawable.ic_hide_eye)
+                    editPasswordLogin.setSelection(editPasswordLogin.text.length)
+                }else{
+                    editPasswordLogin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    hidePassword.setImageResource(R.drawable.ic_eye)
+                    editPasswordLogin.setSelection(editPasswordLogin.text.length)
+                }
+            }
+        }
+
     }
 
     fun login() {

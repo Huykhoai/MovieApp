@@ -35,11 +35,12 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>() {
     private fun statusLogin() {
         val sharePreferences = requireActivity().getSharedPreferences("user", Context.MODE_PRIVATE)
         val loginStatus = sharePreferences.getBoolean("loginStatus",false)
-        if(loginStatus){
-            openScreen(HomeFragment(),true)
-        }else{
-            openScreen(LoginFragment(),true)
-        }
+//        if(loginStatus){
+//            openScreen(HomeFragment(),true)
+//        }else{
+//            openScreen(LoginFragment(),true)
+//        }
+        openScreen(LoginFragment(),true)
     }
 
     private fun initView() {

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_backgroud"
-    tools:context=".view.login.LoginFragment">
+    tools:context=".view.register.RegisterFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,24 +26,40 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign in"
+                android:text="Sign up"
                 android:textColor="@color/white"
                 android:textSize="50sp"
                 android:textStyle="bold"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="128dp"/>
             <EditText
-                android:id="@+id/edit_email_login"
+                android:id="@+id/edit_username_register"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
-                android:paddingHorizontal="16dp"
                 android:layout_marginTop="128dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:hint="Username"
+                android:paddingHorizontal="16dp"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:background="@drawable/intro_btn_background"/>
+            <EditText
+                android:id="@+id/edit_email_register"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:hint="Email"
                 android:textAlignment="center"
+                android:paddingHorizontal="16dp"
                 android:inputType="text"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
@@ -66,14 +82,14 @@
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/intro_btn_background">
                 <EditText
-                    android:id="@+id/edit_password_login"
+                    android:id="@+id/edit_password_register"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:ems="10"
                     android:hint="Password"
-                    android:paddingHorizontal="16dp"
                     android:inputType="textPassword"
                     android:layout_weight="1"
+                    android:paddingHorizontal="16dp"
                     android:textColor="@color/white"
                     android:textAlignment="center"
                     android:maxLines="1"
@@ -88,6 +104,39 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="10dp"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/intro_btn_background">
+                <EditText
+                    android:id="@+id/edit_confirm_password_register"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="16dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:maxLines="1"
+                    android:background="@android:color/transparent"
+                    android:textColorHint="@color/white"
+                    />
+                <ImageView
+                    android:id="@+id/hide_confirm_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_eye"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"/>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_error_password"
                 android:layout_width="wrap_content"
@@ -140,7 +189,7 @@
                     android:textAlignment="center"
                     android:textSize="16dp"/>
                 <TextView
-                    android:id="@+id/btn_nav_signup"
+                    android:id="@+id/btn_dont_have_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sign up"
