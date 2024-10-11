@@ -36,6 +36,7 @@
                     app:srcCompat="@drawable/circle_gradient" />
 
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_avatar"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView"

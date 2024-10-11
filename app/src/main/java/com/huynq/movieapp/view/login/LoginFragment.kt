@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentLoginBinding
+import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.view.home.HomeFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,14 +44,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         lifecycleScope.launch {
             userModel.loginMultableLiveData.observe(viewLifecycleOwner){
                 it.onSuccess {
-                    openScreen(HomeFragment(), true)
-                    val sharePreferences = requireActivity().getSharedPreferences("user",Context.MODE_PRIVATE)
-                    val editor = sharePreferences.edit()
-                    editor.putString("user",Gson().toJson(it))
-                    editor.apply()
-                    Log.d("Huy", "observe: ${it.user}")
+                    binding!!.apply {
+                        openScreen(HomeFragment(), true)
+                        rememember(checkbox.isChecked, it)
+                        tvErrorPassword.visibility = View.GONE
+                    }
+
                 }.onFailure{
-                    showSuccessDialog(it.message)
+                    binding!!.apply {
+                        tvErrorPassword.text = it.message
+                        tvErrorPassword.visibility = View.VISIBLE
+                    }
                 }
             }
         }
@@ -111,14 +115,46 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     fun validatePassword(): Boolean {
         val password = binding!!.editPasswordLogin.text.toString().trim()
+        val upperCasePattern = Pattern.compile("[A-Z]")
+        val lowerCasePattern = Pattern.compile("[a-z]")
+        val specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*")
         binding!!.apply {
             if (password.isEmpty()) {
-                tvErrorPassword.visibility = View.VISIBLE
-                tvErrorPassword.text = "Password is empty"
+                failPassword("Password is empty")
+                return false
+            }else if(password.length < 6){
+                failPassword("Password must be at least 6 characters")
+                return false
+            }
+            else if(!upperCasePattern.matcher(password).find()){
+                failPassword("Password must contain at least one uppercase letter")
+                return false
+            }else if(!lowerCasePattern.matcher(password).find()){
+                failPassword("Password must contain at least one lowercase letter")
+                return false
+            }
+            else if(!specialCharPattern.matcher(password).find()){
+                failPassword("Password must contain at least one special character")
                 return false
             }
             tvErrorPassword.visibility = View.GONE
         }
         return true
+    }
+    fun failPassword(title: String){
+        binding!!.apply {
+            tvErrorPassword.visibility = View.VISIBLE
+            tvErrorPassword.text = title
+        }
+    }
+    fun rememember(cb: Boolean, userResponse: UserResponse){
+        val sharePreferences = requireActivity().getSharedPreferences("user",Context.MODE_PRIVATE)
+        val editor = sharePreferences.edit()
+        if(cb){
+            editor.putString("user",Gson().toJson(userResponse))
+            editor.putBoolean("loginStatus", cb)
+            editor.apply()
+            Log.d("Huy", "observe: ${userResponse.user}")
+        }
     }
 }
