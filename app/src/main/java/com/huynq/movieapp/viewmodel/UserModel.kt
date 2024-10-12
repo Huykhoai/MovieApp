@@ -15,8 +15,8 @@ import javax.inject.Inject
 class UserModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
     var _loginMultableLiveData = MutableLiveData<Result<UserResponse>>()
     val loginMultableLiveData : LiveData<Result<UserResponse>> get() = _loginMultableLiveData
-    var _error = MutableLiveData<Result<String>>()
-    val error : LiveData<Result<String>> get() = _error
+    var _user = MutableLiveData<UserResponse>()
+    val user : LiveData<UserResponse> get() = _user
 
 
     fun login(email: String , password: String){
@@ -27,6 +27,17 @@ class UserModel @Inject constructor(private val userRepository: UserRepository) 
                 }
                     .collect{
                     _loginMultableLiveData.value = Result.success(it)
+                }
+        }
+    }
+    fun get_user(id: String){
+        viewModelScope.launch {
+            userRepository.get_user(id)
+                .catch {
+                    Log.d("Huy", "get_user: ${it.message}")
+                }
+                .collect{
+                    _user.value = it
                 }
         }
     }

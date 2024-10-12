@@ -9,15 +9,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.util.query
 import com.huynq.movieapp.adapter.FavouriteAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentFavouriteBinding
-import com.huynq.movieapp.model.MovieResponse
 import com.huynq.movieapp.room.FavouriteMovie
 import com.huynq.movieapp.utils.ConnectionLiveData
 import com.huynq.movieapp.view.detail.DetailFragment
-import com.huynq.movieapp.view.home.HomeFragment
 import com.huynq.movieapp.viewmodel.FavouriteMovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -212,6 +209,7 @@ class FavouriteFragment : BaseFragment<FragmentFavouriteBinding>() {
             }else{
                 if(isSearchResult){
                     searchResultTextView.visibility = View.VISIBLE
+                    titleEmpty.visibility = View.GONE
                 }else{
                     titleEmpty.visibility = View.VISIBLE
                     constraintLayout6.visibility = View.GONE

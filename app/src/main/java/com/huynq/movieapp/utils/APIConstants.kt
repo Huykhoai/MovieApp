@@ -19,4 +19,5 @@ object APIConstants {
     const val URL_USER = "http://192.168.124.12:3000"
     const val LOGIN = "/api/post/login_user"
     const val RESISTER = "/api/post/create_user"
+    const val get_user = "/api/get/get_user/{id}"
 }

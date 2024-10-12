@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException
 import com.huynq.movieapp.model.ObjectError
 import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.request.LoginRequest
-import com.huynq.movieapp.retrofit.ApiService
 import com.huynq.movieapp.retrofit.ApiUser
 import com.huynq.movieapp.retrofit.ApiUserService
 import kotlinx.coroutines.Dispatchers
@@ -32,4 +31,10 @@ class UserRepository @Inject constructor() {
             throw Exception(errorResponse?.message ?: "Unknown error")
         }
     }.flowOn(Dispatchers.IO)
+     fun get_user(id: String): Flow<UserResponse> = flow{
+     val response = userService.getUser(id)
+        if(response.isSuccessful){
+            emit(response.body()!!)
+        }
+    }
 }

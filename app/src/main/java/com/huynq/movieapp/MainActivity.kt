@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.huynq.movieapp.databinding.ActivityMainBinding
+import com.huynq.movieapp.view.profile.ProfileFragment
 import com.huynq.movieapp.view.favourite.FavouriteFragment
 import com.huynq.movieapp.view.home.HomeFragment
 import com.huynq.movieapp.view.intro.IntroFragment
@@ -38,6 +39,9 @@ class MainActivity : AppCompatActivity() {
              btnHome.setOnClickListener {
                  openScreen(HomeFragment())
              }
+             btnProfile.setOnClickListener {
+                 openScreen(ProfileFragment())
+             }
          }
 
     }
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     private fun openScreen(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.frameLayout_container, fragment)
+        fragmentTransaction.replace(R.id.frameLayout_container, fragment)
         fragmentTransaction.commit()
     }
     fun setBottomNaviationVisibility(visibility: Int) {
