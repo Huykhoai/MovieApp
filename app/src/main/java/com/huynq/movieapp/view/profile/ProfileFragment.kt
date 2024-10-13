@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentProfileBinding
 import com.huynq.movieapp.model.UserResponse
+import com.huynq.movieapp.view.WatchListFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,5 +54,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     }
 
     private fun initView() {
+        binding!!.apply {
+            btnWatchList.setOnClickListener{
+                openScreen(WatchListFragment(),true)
+            }
+        }
     }
 }

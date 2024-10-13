@@ -2,8 +2,10 @@ package com.huynq.movieapp.data
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.model.ObjectError
 import com.huynq.movieapp.model.UserResponse
+import com.huynq.movieapp.model.WatchListResponse
 import com.huynq.movieapp.request.LoginRequest
 import com.huynq.movieapp.retrofit.ApiUser
 import com.huynq.movieapp.retrofit.ApiUserService
@@ -37,4 +39,25 @@ class UserRepository @Inject constructor() {
             emit(response.body()!!)
         }
     }
+    fun watch_list(): Flow<WatchListResponse> = flow{
+        val response = userService.watchList()
+        if(response.isSuccessful){
+            emit(response.body()!!)
+        }
+    }
+    fun add_watch_list(movie: Movies): Flow<WatchListResponse> = flow{
+        val response = userService.addWatchList(movie)
+        if(response.isSuccessful){
+            emit(response.body()!!)
+        }else{
+            val errorResponse = response.errorBody()?.string()?.let {
+                try {
+                    Gson().fromJson(it, ObjectError::class.java)
+                }catch (e: JsonSyntaxException){
+                    null
+        }
+    }
+            throw Exception(errorResponse?.message ?: "Unknown error")
+        }
+    }.flowOn(Dispatchers.IO)
 }

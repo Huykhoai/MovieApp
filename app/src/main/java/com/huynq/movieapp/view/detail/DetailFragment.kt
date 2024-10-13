@@ -19,11 +19,13 @@ import com.huynq.movieapp.adapter.TrailersMovieAdapter
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentDetailBinding
 import com.huynq.movieapp.model.Genre
+import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.room.FavouriteMovie
 import com.huynq.movieapp.utils.APIConstants
 import com.huynq.movieapp.utils.ConnectionLiveData
 import com.huynq.movieapp.viewmodel.FavouriteMovieViewModel
 import com.huynq.movieapp.viewmodel.MainViewModel
+import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +34,7 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class DetailFragment : BaseFragment<FragmentDetailBinding>() {
     private val mainViewModel: MainViewModel by viewModels()
+    private val userModel: UserModel by viewModels()
     private val favouriteViewModel: FavouriteMovieViewModel by viewModels()
     private lateinit var cld : ConnectionLiveData
     private val trailerPaths = mutableListOf<String>()
@@ -130,10 +133,29 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
                         it.title,
                         it.vote_average,
                         APIConstants.IMAGE_PATH+it.poster_path)
+                    var genres : MutableList<Int> = mutableListOf()
+                    for(int in it.genres){
+                        genres.add(int.id)
+                    }
+                    userModel.add_watch_list(Movies(
+                        it.adult,it.backdrop_path,genres,it.id,it.original_language,it.original_title,
+                        it.overview,it.popularity,it.poster_path, it.release_date,it.title,it.video,
+                        it.vote_average,it.vote_count
+                    ))
+                    obsever()
                 })
             }
         }
 
+    }
+    private fun obsever(){
+        userModel.addWatchList.observe(viewLifecycleOwner, Observer {
+          it.onSuccess{
+              Log.d("Huy", "obsever: ${it.message}")
+          }.onFailure {
+              Log.d("Huy", "obsever: ${it.message}")
+          }
+        })
     }
     fun displayVideoMovies(){
         lifecycleScope.launch {
