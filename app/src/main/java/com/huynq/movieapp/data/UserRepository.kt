@@ -7,6 +7,7 @@ import com.huynq.movieapp.model.ObjectError
 import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.model.WatchListResponse
 import com.huynq.movieapp.request.LoginRequest
+import com.huynq.movieapp.request.RequestChangePass
 import com.huynq.movieapp.retrofit.ApiUser
 import com.huynq.movieapp.retrofit.ApiUserService
 import kotlinx.coroutines.Dispatchers
@@ -60,4 +61,20 @@ class UserRepository @Inject constructor() {
             throw Exception(errorResponse?.message ?: "Unknown error")
         }
     }.flowOn(Dispatchers.IO)
+    fun change_password(email: String, oldPassword: String, newPassword: String): Flow<UserResponse> = flow{
+        val response = userService.changePassword(RequestChangePass(email,oldPassword,newPassword))
+        if(response.isSuccessful){
+            emit(response.body()!!)
+        }else{
+            val errorResponse = response.errorBody()?.string()?.let {
+                try {
+                    Gson().fromJson(it, ObjectError::class.java)
+                }catch (e: JsonSyntaxException){
+                    null
+        }
+    }
+            throw Exception(errorResponse?.message ?: "Unknown error")
+        }
+    }.flowOn(Dispatchers.IO)
+
 }

@@ -4,6 +4,7 @@ import com.huynq.movieapp.model.Movies
 import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.model.WatchListResponse
 import com.huynq.movieapp.request.LoginRequest
+import com.huynq.movieapp.request.RequestChangePass
 import com.huynq.movieapp.utils.APIConstants
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,4 +21,6 @@ interface ApiUserService {
     suspend fun addWatchList(@Body movie: Movies): Response<WatchListResponse>
     @GET(APIConstants.watch_list)
     suspend fun watchList(): Response<WatchListResponse>
+    @POST(APIConstants.change_password)
+    suspend fun changePassword(@Body request: RequestChangePass): Response<UserResponse>
 }

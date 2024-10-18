@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,6 +35,21 @@ class WatchListFragment : BaseFragment<FragmentWatchListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observer()
+        initView()
+    }
+
+    private fun initView() {
+        binding!!.apply {
+            btnBack.setOnClickListener {
+               onBack()
+            }
+            requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    onBack()
+                }
+
+            })
+        }
     }
 
     private fun observer() {

@@ -11,6 +11,7 @@ import com.huynq.movieapp.view.profile.ProfileFragment
 import com.huynq.movieapp.view.favourite.FavouriteFragment
 import com.huynq.movieapp.view.home.HomeFragment
 import com.huynq.movieapp.view.intro.IntroFragment
+import com.huynq.movieapp.view.search.SearchFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity() {
              }
              btnProfile.setOnClickListener {
                  openScreen(ProfileFragment())
+             }
+             btnSearch.setOnClickListener {
+                 openScreen(SearchFragment())
              }
          }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -82,9 +83,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun initView() {
-        binding?.btnBack?.setOnClickListener {
-            activity?.onBackPressed()
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+
+        })
     }
     private fun displaySearch(){
         val query = arguments?.getString("query")

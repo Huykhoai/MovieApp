@@ -21,6 +21,7 @@ object APIConstants {
     const val get_user = "/api/get/get_user/{id}"
     const val add_watch_list = "/api/post/add_watchlist"
     const val watch_list = "/api/get/watchlist"
-
+    const val change_avatar = "/api/post/change_avatar"
+    const val change_password = "/api/post/change_password"
 
 }

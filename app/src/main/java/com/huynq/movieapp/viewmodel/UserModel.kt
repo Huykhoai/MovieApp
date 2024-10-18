@@ -23,6 +23,8 @@ class UserModel @Inject constructor(private val userRepository: UserRepository) 
     val watchList: LiveData<WatchListResponse> get() = _watchList
     var _addWatchList = MutableLiveData<Result<WatchListResponse>>()
     val addWatchList: LiveData<Result<WatchListResponse>> get() = _addWatchList
+    var _change_password = MutableLiveData<Result<UserResponse>>()
+    val change_password: LiveData<Result<UserResponse>> get() = _change_password
 
 
     fun login(email: String, password: String) {
@@ -69,6 +71,17 @@ class UserModel @Inject constructor(private val userRepository: UserRepository) 
                 }
                 .collect {
                     _addWatchList.value = Result.success(it)
+                }
+        }
+    }
+    fun change_password(email: String, oldPassword: String, newPassword: String){
+        viewModelScope.launch {
+            userRepository.change_password(email,oldPassword,newPassword)
+                .catch {
+                    _change_password.value = Result.failure(it)
+                }
+                .collect{
+                    _change_password.value = Result.success(it)
                 }
         }
     }

@@ -138,7 +138,8 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>() {
                         genres.add(int.id)
                     }
                     userModel.add_watch_list(Movies(
-                        it.adult,it.backdrop_path,genres,it.id,it.original_language,it.original_title,
+                        it.adult,
+                        (it.backdrop_path?: null).toString(),genres,it.id,it.original_language,it.original_title,
                         it.overview,it.popularity,it.poster_path, it.release_date,it.title,it.video,
                         it.vote_average,it.vote_count
                     ))

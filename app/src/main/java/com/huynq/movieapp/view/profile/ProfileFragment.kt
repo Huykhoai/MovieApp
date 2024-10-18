@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentProfileBinding
 import com.huynq.movieapp.model.UserResponse
+import com.huynq.movieapp.view.ChangePasswordFragment
 import com.huynq.movieapp.view.WatchListFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +60,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
             btnWatchList.setOnClickListener{
                 openScreen(WatchListFragment(),true)
             }
+            btnChangePass.setOnClickListener {
+                openScreen(ChangePasswordFragment(), true)
+            }
+            requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                }
+
+            })
         }
     }
 }
