@@ -1,4 +1,4 @@
-package com.huynq.movieapp.view
+package com.huynq.movieapp.view.watchlist
 
 import android.os.Bundle
 import android.view.LayoutInflater

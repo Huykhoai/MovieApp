@@ -13,8 +13,9 @@ import com.google.gson.Gson
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentProfileBinding
 import com.huynq.movieapp.model.UserResponse
-import com.huynq.movieapp.view.ChangePasswordFragment
-import com.huynq.movieapp.view.WatchListFragment
+import com.huynq.movieapp.view.changepass.ChangePasswordFragment
+import com.huynq.movieapp.view.login.LoginFragment
+import com.huynq.movieapp.view.watchlist.WatchListFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         binding!!.lifecycleOwner =this
         binding!!.proccessBar.visibility = View.VISIBLE
         super.onViewCreated(view, savedInstanceState)
-        initView()
         observer()
     }
 
@@ -50,6 +50,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     proccessBar.visibility = View.GONE
                     Log.d("Huy", "observer:${it.user} ")
                     Glide.with(requireActivity()).load(it.user.avatar).into(imgProfile)
+                    initView()
                 }
             }
         }
@@ -68,6 +69,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                 }
 
             })
+            btnLogout.setOnClickListener {
+                val sharePreferences = requireActivity().getSharedPreferences("user", Context.MODE_PRIVATE)
+                sharePreferences.edit().clear().apply()
+                openScreen(LoginFragment(), false)
+            }
         }
     }
 }

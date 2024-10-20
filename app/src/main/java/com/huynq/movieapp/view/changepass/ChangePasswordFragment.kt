@@ -1,26 +1,22 @@
-package com.huynq.movieapp.view
+package com.huynq.movieapp.view.changepass
 
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.transition.Visibility
-import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.huynq.movieapp.R
 import com.huynq.movieapp.base.BaseFragment
 import com.huynq.movieapp.databinding.FragmentChangePasswordBinding
 import com.huynq.movieapp.model.UserResponse
 import com.huynq.movieapp.utils.ConnectionLiveData
+import com.huynq.movieapp.view.login.LoginFragment
 import com.huynq.movieapp.viewmodel.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -88,9 +84,16 @@ class ChangePasswordFragment : BaseFragment<FragmentChangePasswordBinding>() {
                         viewModel.change_password.observe(viewLifecycleOwner){
                             it.onSuccess { it ->
                                 proccessBar.visibility = View.GONE
-                                showSuccessDialog(it.message)
                                 editOldPassword.setText("")
                                 editNewPassword.setText("")
+                                val sharedPreferences = requireActivity().getSharedPreferences("user",Context.MODE_PRIVATE)
+                                val editor = sharedPreferences.edit()
+                                editor.remove("loginStatus")
+                                editor.apply()
+                                showDialog(it.message, "Do you want to log out?"){
+                                  sharedPreferences.edit().clear().apply()
+                                    openScreen(LoginFragment(),false)
+                                }
                             }
                                 .onFailure { it ->
                                     proccessBar.visibility = View.GONE

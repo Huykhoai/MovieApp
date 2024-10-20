@@ -177,6 +177,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             editor.putBoolean("loginStatus", cb)
             editor.apply()
             Log.d("Huy", "observe: ${userResponse.user}")
+        }else{
+            editor.putString("user",Gson().toJson(userResponse))
+            editor.apply()
         }
     }
 }

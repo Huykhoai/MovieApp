@@ -147,6 +147,7 @@
                     android:textColor="@color/white"/>
             </LinearLayout>
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
