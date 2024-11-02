@@ -23,7 +23,7 @@ class BannerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return bannerList.size
+        return 5
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

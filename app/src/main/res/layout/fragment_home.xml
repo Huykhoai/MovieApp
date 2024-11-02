@@ -45,8 +45,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
             <me.relex.circleindicator.CircleIndicator3
                 android:id="@+id/circle_indicator"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginHorizontal="100dp"
                 android:layout_gravity="center_horizontal"
                 app:ci_drawable="@drawable/circle_inditor"/>
             <TextView

@@ -1,7 +1,12 @@
 package com.huynq.movieapp.base
 
 import android.app.Dialog
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +16,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.huynq.movieapp.R
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.OutputStream
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
     private var loadingDialog: Dialog? = null
@@ -86,5 +94,28 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         val btnConfirm = dialog.findViewById<TextView>(R.id.btn_success_ok)
         btnConfirm.setOnClickListener { dialog.dismiss() }
         dialog.show()
+    }
+    fun convertImageToBase64(context: Context,imageUri: Uri): String{
+        var base64Image = ""
+        try {
+            val inputStream = context.contentResolver.openInputStream(imageUri)
+            val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outputStream)
+            val bytes = outputStream.toByteArray()
+            base64Image = Base64.encodeToString(bytes,Base64.DEFAULT)
+        }catch (e: FileNotFoundException){
+            throw RuntimeException(e)
+        }
+        return base64Image
+    }
+    fun convertBase64toImage(base64: String): Bitmap? {
+        try {
+            val bytes = Base64.decode(base64, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+        }catch (e: IllegalArgumentException){
+            e.printStackTrace()
+            return null
+        }
     }
 }
