@@ -58,9 +58,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(){
             handle = Handler(Looper.getMainLooper())
             runnable = Runnable{
                 var current = viewpager.currentItem
-                current = if(current == listImage.size-1) 0 else current + 1
-                viewpager.currentItem = current
-
+                if(current == 4) {
+                    viewpager.currentItem = 0
+                } else {
+                    viewpager.currentItem += 1
+                }
             }
         }
     }
